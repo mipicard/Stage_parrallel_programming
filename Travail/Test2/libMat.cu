@@ -12,7 +12,7 @@
 #include "libMat.h"
 
 float* iniSquare(const int dim){
-	float *mat = (float *)malloc(dim*dim*sizeof(float));
+	float *mat =(float *) malloc(dim*dim*sizeof(float));
 	if(mat == NULL){exit(EXIT_FAILURE);}
 	int i;
 	for(i=0;i<dim*dim;i++){
@@ -80,25 +80,25 @@ void askValueMatriceSquare(float* mat,const int Width, const int r){
 	}
 }
 
-void ask(float *M,float *N,const int Width,const int r){
+void ask(float *M,float *N,const int Width,const int r, const int a){
 	printf("M :");
 	askValueMatriceSquare(M,Width,r);
-	if(r!=0){afficheMatriceSquare(M,Width);}
+	if(r!=0 && a){afficheMatriceSquare(M,Width);}
 	printf("\nN :");
 	askValueMatriceSquare(N,Width,r);
-	if(r!=0){afficheMatriceSquare(N,Width);}
+	if(r!=0 && a){afficheMatriceSquare(N,Width);}
 }
 
 void usage(){
 	printf("Calculera le produit de 2 matrice aléatoire\n");
 	printf(" -t : permet à l'utilisateur de définir la taille des matrices\n");
-	printf(" -c : permet à l'utilisateur de remplir de lui même les matrices\n");
+	printf(" -c : permet à l'utilisateur de remplir de lui même les matrices\n	* 0 pour l'entrée par clavier\n	* 1 pour l'entrée automatisé via un drand48\n");
 	exit(0);
 }
 
-void defArg(const int argc,char* argv[], int *w, int *r){
+void defArg(const int argc,char* argv[], int *w, int *r,int *a){
 	int c;
-	while((c = getopt (argc, argv, "?t:c:"))!=-1){
+	while((c = getopt (argc, argv, "?t:c:a"))!=-1){
 		switch(c){
 			case 't':
 				*w = max2Int(1,strtol(optarg,NULL,10));
@@ -106,8 +106,8 @@ void defArg(const int argc,char* argv[], int *w, int *r){
 			case 'c':
 				*r = (int)strtol(optarg,NULL,10);
 				break;
-			case '?':
-				usage();
+			case 'a':
+				*a = 0;
 				break;
 			default:
 				usage();

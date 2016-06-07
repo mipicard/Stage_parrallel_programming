@@ -12,7 +12,7 @@
 #include "libMatGPU.h"
 
 void multGPU1_Square(const float *M,const float *N,float *P,const int Width){
-	if(Width>512){printf("L'algorithme actuel ne permet pas des calculs de matrices de taille supérieur à 512");exit(EXIT_SUCCESS);}
+	if(Width>512){printf("\nL'algorithme actuel ne permet pas des calculs de matrices de taille supérieur à 512\n");exit(EXIT_SUCCESS);}
 	int taille = Width * Width * sizeof(float);
 	
 	//initialisation des matrices sur le GPU
@@ -26,7 +26,8 @@ void multGPU1_Square(const float *M,const float *N,float *P,const int Width){
 		block : structure des threads par blocs, ici en une matrice carrée, donc Width x Width x 1
 		grille : ici, on n'utilise que 1 bloc de calcul, donc 1 x 1 x 1
 	*/
-	multGPU1_Square_aux<<<dimBlock,dimGrid>>>(Mg,Ng,Pg,Width);
+	multGPU1_Square_aux<<<dimGrid,dimBlock>>>(Mg,Ng,Pg,Width); //La grille puis les blocs
+	
 	//copie de la matrice obtenue
 	if((cudaMemcpy(P,Pg,taille,cudaMemcpyDeviceToHost)) != cudaSuccess){exit(EXIT_FAILURE);}
 	//libération des matrices sur le GPU
@@ -42,7 +43,7 @@ float* iniSquareGPU(const float *M,const int taille){
 	return Mg;
 }
 
-__global__ void multGPU1_Square_aux(const float *Mg,const float *Ng,float *Pg,const int Width){
+__global__ void multGPU1_Square_aux(float *Mg,float *Ng,float *Pg,int Width){
 	// ID des threads (ici en 2d puisque que l'on est en matrice 2d)
 	int tx = threadIdx.x,ty = threadIdx.y,k;
 	
