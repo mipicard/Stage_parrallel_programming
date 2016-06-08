@@ -20,6 +20,7 @@ float* iniSquareGPU(const float *M,const int taille){
 }
 
 
+// 1ere version du multiplicateur de matrice, limité à des matrices 32*32 maximum
 void multGPU1_Square(const float *M,const float *N,float *P,const int Width){
 	if(Width*Width>1024){printf("\nL'algorithme actuel ne permet pas des calculs de matrices d'aires supérieur à 2^10\n");exit(EXIT_SUCCESS);}
 	int taille = Width * Width * sizeof(float);
@@ -60,5 +61,50 @@ __global__ void multGPU1_Square_aux(float *Mg,float *Ng,float *Pg,int Width){
 	}
 	// inscris la valeur dans la case correspondante
 	Pg[ty*Width+tx] = sum;
+}
+
+
+//2eme version, avec des matrices allant jusqu'à des taille de 65535*65535 de blocs de 32*32
+void multGPU2_Square(const float *M,const float *N,float *P,const int Width){
+	int taille = Width * Width * sizeof(float);
+	
+	//initialisation des matrices sur le GPU
+	float *Mg=iniSquareGPU(M,taille),*Ng=iniSquareGPU(N,taille);
+	float *Pg=NULL;
+	if((cudaMalloc((void **)&Pg,taille))!=cudaSuccess){exit(EXIT_FAILURE);}
+	
+	//appel la fonction de calcul
+		//initialisation des dimensions des blocks et de la grille
+		int div = divMaxDim(Width);
+		int divG = Width/div;
+		if(divG>65535){printf("Erreur : la séparation en block n'est pas assez efficace pour cette dimension");exit(0);}
+		dim3 dimBlock(div,div,1),dimGrid(divG,divG,1);
+		
+		//appel du kernel
+		multGPU2_Square_aux<<<dimGrid,dimBlock>>>(Mg,Ng,Pg,Width,div);
+	
+	//copie de la matrice obtenue
+	if((cudaMemcpy(P,Pg,taille,cudaMemcpyDeviceToHost)) != cudaSuccess){exit(EXIT_FAILURE);}
+	//libération des matrices sur le GPU
+	cudaFree(Mg);
+	cudaFree(Ng);
+	cudaFree(Pg);
+}
+
+__global__ void multGPU2_Square_aux(float *Mg,float *Ng,float *Pg,int Width,int nbThreadPerBlock){
+	int ligne= blockIdx.y*nbThreadPerBlock + threadIdx.y, colonne= blockIdx.x*nbThreadPerBlock + threadIdx.x,k;
+	float sum = 0;
+	
+	for(k=0;k<Width;k++){
+		sum+= Mg[ligne*Width+k] * Ng[k*Width+colonne];;
+	}
+	
+	Pg[ligne*Width+colonne] = sum;
+}
+
+int divMaxDim(const int dim){
+	int answer = 32;
+	while(dim%answer){answer--;}
+	return answer;
 }
 

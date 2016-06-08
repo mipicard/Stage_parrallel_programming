@@ -5,4 +5,4 @@ Suite de l'exercice sur la multiplication des matrices :
 	-> suite du travail
 		* compréhension du système des fonctions sur GPU, test de la 1ère version (not totally functionnal)
 		* Apprentissage de Git et ajout du projet sur GitHub
-		* Résolution des bugs précedent (problème sur les appels du thread, seul le premier est appellé en continu!)
+		* Résolution des bugs précedent
