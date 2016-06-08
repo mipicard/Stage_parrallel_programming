@@ -1,0 +1,9 @@
+Démarrage de l'exercice sur les multiplications de matrices :
+	-> codage en C de manière simple pour posséder une base viable (pour les tests de validité des futurs algorithmes)
+		* définition des fonctions basiques
+			+ initialisation des matrices
+			+ multiplication de matrice la plus basiquement possible
+			+ affichage des matrices
+		* travail sur l'entrée des valeurs
+			+ définition d'un mode d'entrée par l'utilisateur ou d'un remplissage aléatoire FIXE (Test1)
+			+ idem mais avec getopt ( +usage() ) pour choisir la taille des matrices carrées et l'utilisation ou non d'un random. (Test2)
