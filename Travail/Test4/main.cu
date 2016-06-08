@@ -29,7 +29,7 @@ int main(int argc, char* argv[]){
 	ask(M,N,Width,r,a);
 	
 	// Calcul de M*N -> P
-	multCPU1_Square(M,N,P1,Width);
+	multGPU2_Square(M,N,P1,Width);
 	if (a!=0){
 		printf("\nP1 : ");
 		afficheMatriceSquare(P1,Width);
