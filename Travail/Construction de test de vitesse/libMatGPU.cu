@@ -108,3 +108,52 @@ int divMaxDim(const int dim){
 	return answer;
 }
 
+//3eme version, avec partage des donnees dans les shaders (partagé entre chaque thread d'un block) donc temps d'accès de 1/Width (~, il y a Width/div phases de calcul)
+void multGPU3_Square(const float *M,const float *N,float *P,const int Width){
+	int taille = Width * Width * sizeof(float);
+	
+	//initialisation des matrices sur le GPU
+	float *Mg=iniSquareGPU(M,taille),*Ng=iniSquareGPU(N,taille);
+	float *Pg=NULL;
+	if((cudaMalloc((void **)&Pg,taille))!=cudaSuccess){exit(EXIT_FAILURE);}
+	
+	//appel la fonction de calcul
+		//initialisation des dimensions des blocks et de la grille
+		int div = divMaxDim(Width);
+		int divG = Width/div;
+		if(divG>65535){printf("Erreur : la séparation en block n'est pas assez efficace pour cette dimension");exit(0);}
+		dim3 dimBlock(div,div,1),dimGrid(divG,divG,1);
+		
+		//appel du kernel
+		multGPU3_Square_aux<<<dimGrid,dimBlock>>>(Mg,Ng,Pg,Width,div);
+	
+	//copie de la matrice obtenue
+	if((cudaMemcpy(P,Pg,taille,cudaMemcpyDeviceToHost)) != cudaSuccess){exit(EXIT_FAILURE);}
+	//libération des matrices sur le GPU
+	cudaFree(Mg);
+	cudaFree(Ng);
+	cudaFree(Pg);
+}
+
+__global__ void multGPU3_Square_aux(float *Mg,float *Ng,float *Pg,int Width,int nbThreadPerBlock){
+	float sum = 0;
+	__shared__ float Mgshader[32][32]; //On met le nbThreadPerBlock maximal possible, sinon il est impossible d'utiliser cette méthode...
+	__shared__ float Ngshader[32][32];
+	
+	int s,k,bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y;
+	int ligne = by*nbThreadPerBlock+ty, colonne = bx*nbThreadPerBlock+tx;
+	
+	for(s=0;s<(Width/nbThreadPerBlock);s++)
+	{
+		Mgshader[ty][tx]=Mg[ligne*Width+(s*nbThreadPerBlock + tx)];
+		Ngshader[ty][tx]=Ng[colonne+Width*(s*nbThreadPerBlock + ty)];
+		__syncthreads();
+		
+		for(k=0;k<nbThreadPerBlock;k++){
+			sum+= Mgshader[ty][k] * Ngshader[k][tx];
+		}
+		__syncthreads();
+	}
+	Pg[ligne*Width+colonne] = sum;
+}
+

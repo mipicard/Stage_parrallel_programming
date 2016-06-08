@@ -1,0 +1,838 @@
+talisgohi
+    description: Computer
+    bits: 64 bits
+    fonctionnalités: vsyscall32
+  *-core
+       description: Motherboard
+       identifiant matériel: 0
+     *-memory
+          description: Mémoire système
+          identifiant matériel: 0
+          taille: 15GiB
+     *-cpu
+          produit: Intel(R) Xeon(R) CPU E5-1660 0 @ 3.30GHz
+          fabriquant: Intel Corp.
+          identifiant matériel: 1
+          information bus: cpu@0
+          taille: 2230MHz
+          capacité: 3900MHz
+          bits: 64 bits
+          fonctionnalités: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp x86-64 constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic popcnt tsc_deadline_timer aes xsave avx lahf_lm epb tpr_shadow vnmi flexpriority ept vpid xsaveopt dtherm ida arat pln pts cpufreq
+     *-pci
+          description: Host bridge
+          produit: Xeon E5/Core i7 DMI2
+          fabriquant: Intel Corporation
+          identifiant matériel: 100
+          information bus: pci@0000:00:00.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+        *-pci:0
+             description: PCI bridge
+             produit: Xeon E5/Core i7 IIO PCI Express Root Port 1a
+             fabriquant: Intel Corporation
+             identifiant matériel: 1
+             information bus: pci@0000:00:01.0
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:24
+        *-pci:1
+             description: PCI bridge
+             produit: Xeon E5/Core i7 IIO PCI Express Root Port 2a
+             fabriquant: Intel Corporation
+             identifiant matériel: 2
+             information bus: pci@0000:00:02.0
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:25 portE/S:c000(taille=4096) mémoire:ee000000-ef0fffff portE/S:e0000000(taille=167772160)
+           *-display
+                description: VGA compatible controller
+                produit: GF108GL [Quadro 600]
+                fabriquant: NVIDIA Corporation
+                identifiant matériel: 0
+                information bus: pci@0000:05:00.0
+                version: a1
+                bits: 64 bits
+                horloge: 33MHz
+                fonctionnalités: vga_controller bus_master cap_list rom
+                configuration: driver=nvidia latency=0
+                ressources: irq:42 mémoire:ee000000-eeffffff mémoire:e0000000-e7ffffff mémoire:e8000000-e9ffffff portE/S:c000(taille=128) mémoire:ef000000-ef07ffff
+           *-multimedia
+                description: Audio device
+                produit: GF108 High Definition Audio Controller
+                fabriquant: NVIDIA Corporation
+                identifiant matériel: 0.1
+                information bus: pci@0000:05:00.1
+                version: a1
+                bits: 32 bits
+                horloge: 33MHz
+                fonctionnalités: bus_master cap_list
+                configuration: driver=snd_hda_intel latency=0
+                ressources: irq:41 mémoire:ef080000-ef083fff
+        *-pci:2
+             description: PCI bridge
+             produit: Xeon E5/Core i7 IIO PCI Express Root Port 3a in PCI Express Mode
+             fabriquant: Intel Corporation
+             identifiant matériel: 3
+             information bus: pci@0000:00:03.0
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:26
+        *-generic:0 NON-RÉCLAMÉ
+             description: System peripheral
+             produit: Xeon E5/Core i7 Address Map, VTd_Misc, System Management
+             fabriquant: Intel Corporation
+             identifiant matériel: 5
+             information bus: pci@0000:00:05.0
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: cap_list
+             configuration: latency=0
+        *-generic:1 NON-RÉCLAMÉ
+             description: System peripheral
+             produit: Xeon E5/Core i7 Control Status and Global Errors
+             fabriquant: Intel Corporation
+             identifiant matériel: 5.2
+             information bus: pci@0000:00:05.2
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: cap_list
+             configuration: latency=0
+        *-generic:2 NON-RÉCLAMÉ
+             description: PIC
+             produit: Xeon E5/Core i7 I/O APIC
+             fabriquant: Intel Corporation
+             identifiant matériel: 5.4
+             information bus: pci@0000:00:05.4
+             version: 07
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: io_x_-apic bus_master cap_list
+             configuration: latency=0
+             ressources: mémoire:ef346000-ef346fff
+        *-pci:3
+             description: PCI bridge
+             produit: C600/X79 series chipset PCI Express Virtual Root Port
+             fabriquant: Intel Corporation
+             identifiant matériel: 11
+             information bus: pci@0000:00:11.0
+             version: 05
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:16 portE/S:d000(taille=4096) portE/S:ea400000(taille=5242880)
+           *-storage
+                description: Serial Attached SCSI controller
+                produit: C602 chipset 4-Port SATA Storage Control Unit
+                fabriquant: Intel Corporation
+                identifiant matériel: 0
+                information bus: pci@0000:02:00.0
+                version: 05
+                bits: 64 bits
+                horloge: 33MHz
+                fonctionnalités: storage bus_master cap_list
+                configuration: driver=isci latency=0
+                ressources: irq:16 mémoire:ea87c000-ea87ffff mémoire:ea400000-ea7fffff portE/S:d000(taille=256) mémoire:ea800000-ea87bfff
+        *-communication:0
+             description: Communication controller
+             produit: C600/X79 series chipset MEI Controller #1
+             fabriquant: Intel Corporation
+             identifiant matériel: 16
+             information bus: pci@0000:00:16.0
+             version: 05
+             bits: 64 bits
+             horloge: 33MHz
+             fonctionnalités: bus_master cap_list
+             configuration: driver=mei_me latency=0
+             ressources: irq:39 mémoire:ef345000-ef34500f
+        *-ide
+             description: IDE interface
+             produit: C600/X79 series chipset IDE-r Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 16.2
+             information bus: pci@0000:00:16.2
+             version: 05
+             bits: 32 bits
+             horloge: 66MHz
+             fonctionnalités: ide bus_master cap_list
+             configuration: driver=ata_generic latency=0
+             ressources: irq:18 portE/S:e0b0(taille=8) portE/S:e0a0(taille=4) portE/S:e090(taille=8) portE/S:e080(taille=4) portE/S:e070(taille=16)
+        *-communication:1
+             description: Serial controller
+             produit: C600/X79 series chipset KT Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 16.3
+             information bus: pci@0000:00:16.3
+             version: 05
+             bits: 32 bits
+             horloge: 66MHz
+             fonctionnalités: 16550 bus_master cap_list
+             configuration: driver=serial latency=0
+             ressources: irq:17 portE/S:e060(taille=8) mémoire:ef344000-ef344fff
+        *-network
+             description: Ethernet interface
+             produit: 82579LM Gigabit Network Connection
+             fabriquant: Intel Corporation
+             identifiant matériel: 19
+             information bus: pci@0000:00:19.0
+             nom logique: eno1
+             version: 05
+             numéro de série: b4:b5:2f:b8:1c:80
+             taille: 1Gbit/s
+             capacité: 1Gbit/s
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: bus_master cap_list ethernet physical tp 10bt 10bt-fd 100bt 100bt-fd 1000bt-fd autonegotiation
+             configuration: autonegotiation=on broadcast=yes driver=e1000e driverversion=3.2.6-k duplex=full firmware=0.13-4 ip=129.88.54.166 latency=0 link=yes multicast=yes port=twisted pair speed=1Gbit/s
+             ressources: irq:38 mémoire:ef300000-ef31ffff mémoire:ef349000-ef349fff portE/S:e040(taille=32)
+        *-usb:0
+             description: USB controller
+             produit: C600/X79 series chipset USB2 Enhanced Host Controller #2
+             fabriquant: Intel Corporation
+             identifiant matériel: 1a
+             information bus: pci@0000:00:1a.0
+             version: 05
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: ehci bus_master cap_list
+             configuration: driver=ehci-pci latency=0
+             ressources: irq:16 mémoire:ef34b000-ef34b3ff
+        *-multimedia
+             description: Audio device
+             produit: C600/X79 series chipset High Definition Audio Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 1b
+             information bus: pci@0000:00:1b.0
+             version: 05
+             bits: 64 bits
+             horloge: 33MHz
+             fonctionnalités: bus_master cap_list
+             configuration: driver=snd_hda_intel latency=0
+             ressources: irq:40 mémoire:ef340000-ef343fff
+        *-pci:4
+             description: PCI bridge
+             produit: C600/X79 series chipset PCI Express Root Port 2
+             fabriquant: Intel Corporation
+             identifiant matériel: 1c
+             information bus: pci@0000:00:1c.0
+             version: b5
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:16
+        *-pci:5
+             description: PCI bridge
+             produit: C600/X79 series chipset PCI Express Root Port 5
+             fabriquant: Intel Corporation
+             identifiant matériel: 1c.5
+             information bus: pci@0000:00:1c.5
+             version: b5
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:17
+        *-pci:6
+             description: PCI bridge
+             produit: C600/X79 series chipset PCI Express Root Port 3
+             fabriquant: Intel Corporation
+             identifiant matériel: 1c.6
+             information bus: pci@0000:00:1c.6
+             version: b5
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:18
+        *-pci:7
+             description: PCI bridge
+             produit: C600/X79 series chipset PCI Express Root Port 4
+             fabriquant: Intel Corporation
+             identifiant matériel: 1c.7
+             information bus: pci@0000:00:1c.7
+             version: b5
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci normal_decode bus_master cap_list
+             configuration: driver=pcieport
+             ressources: irq:19 mémoire:ef200000-ef2fffff
+           *-usb
+                description: USB controller
+                produit: TUSB73x0 SuperSpeed USB 3.0 xHCI Host Controller
+                fabriquant: Texas Instruments
+                identifiant matériel: 0
+                information bus: pci@0000:08:00.0
+                version: 02
+                bits: 64 bits
+                horloge: 33MHz
+                fonctionnalités: xhci bus_master cap_list
+                configuration: driver=xhci_hcd latency=0
+                ressources: irq:19 mémoire:ef200000-ef20ffff mémoire:ef210000-ef211fff
+        *-usb:1
+             description: USB controller
+             produit: C600/X79 series chipset USB2 Enhanced Host Controller #1
+             fabriquant: Intel Corporation
+             identifiant matériel: 1d
+             information bus: pci@0000:00:1d.0
+             version: 05
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: ehci bus_master cap_list
+             configuration: driver=ehci-pci latency=0
+             ressources: irq:23 mémoire:ef34a000-ef34a3ff
+        *-pci:8
+             description: PCI bridge
+             produit: 82801 PCI Bridge
+             fabriquant: Intel Corporation
+             identifiant matériel: 1e
+             information bus: pci@0000:00:1e.0
+             version: a5
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: pci subtractive_decode bus_master cap_list
+             ressources: mémoire:ef100000-ef1fffff
+           *-firewire
+                description: FireWire (IEEE 1394)
+                produit: FW322/323 [TrueFire] 1394a Controller
+                fabriquant: LSI Corporation
+                identifiant matériel: 5
+                information bus: pci@0000:09:05.0
+                version: 70
+                bits: 32 bits
+                horloge: 33MHz
+                fonctionnalités: ohci bus_master cap_list
+                configuration: driver=firewire_ohci latency=128 maxlatency=24 mingnt=12
+                ressources: irq:19 mémoire:ef100000-ef100fff
+        *-isa
+             description: ISA bridge
+             produit: C600/X79 series chipset LPC Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 1f
+             information bus: pci@0000:00:1f.0
+             version: 05
+             bits: 32 bits
+             horloge: 33MHz
+             fonctionnalités: isa bus_master cap_list
+             configuration: driver=lpc_ich latency=0
+             ressources: irq:0
+        *-storage
+             description: RAID bus controller
+             produit: C600/X79 series chipset SATA RAID Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 1f.2
+             information bus: pci@0000:00:1f.2
+             version: 05
+             bits: 32 bits
+             horloge: 66MHz
+             fonctionnalités: storage bus_master cap_list
+             configuration: driver=ahci latency=0
+             ressources: irq:35 portE/S:e0f0(taille=8) portE/S:e0e0(taille=4) portE/S:e0d0(taille=8) portE/S:e0c0(taille=4) portE/S:e020(taille=32) mémoire:ef348000-ef3487ff
+        *-serial NON-RÉCLAMÉ
+             description: SMBus
+             produit: C600/X79 series chipset SMBus Host Controller
+             fabriquant: Intel Corporation
+             identifiant matériel: 1f.3
+             information bus: pci@0000:00:1f.3
+             version: 05
+             bits: 64 bits
+             horloge: 33MHz
+             configuration: latency=0
+             ressources: mémoire:ef347000-ef3470ff portE/S:e000(taille=32)
+     *-generic:0 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link 0
+          fabriquant: Intel Corporation
+          identifiant matériel: 8
+          information bus: pci@0000:7f:08.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:1 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link Reut 0
+          fabriquant: Intel Corporation
+          identifiant matériel: 8.3
+          information bus: pci@0000:7f:08.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:2 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link Reut 0
+          fabriquant: Intel Corporation
+          identifiant matériel: 8.4
+          information bus: pci@0000:7f:08.4
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:3 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link 1
+          fabriquant: Intel Corporation
+          identifiant matériel: 9
+          information bus: pci@0000:7f:09.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:4 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link Reut 1
+          fabriquant: Intel Corporation
+          identifiant matériel: 9.3
+          information bus: pci@0000:7f:09.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:5 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 QPI Link Reut 1
+          fabriquant: Intel Corporation
+          identifiant matériel: 9.4
+          information bus: pci@0000:7f:09.4
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:6 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Power Control Unit 0
+          fabriquant: Intel Corporation
+          identifiant matériel: a
+          information bus: pci@0000:7f:0a.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:7 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Power Control Unit 1
+          fabriquant: Intel Corporation
+          identifiant matériel: a.1
+          information bus: pci@0000:7f:0a.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:8 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Power Control Unit 2
+          fabriquant: Intel Corporation
+          identifiant matériel: a.2
+          information bus: pci@0000:7f:0a.2
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:9 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Power Control Unit 3
+          fabriquant: Intel Corporation
+          identifiant matériel: a.3
+          information bus: pci@0000:7f:0a.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:10 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Interrupt Control Registers
+          fabriquant: Intel Corporation
+          identifiant matériel: b
+          information bus: pci@0000:7f:0b.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:11 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Semaphore and Scratchpad Configuration Registers
+          fabriquant: Intel Corporation
+          identifiant matériel: b.3
+          information bus: pci@0000:7f:0b.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:12 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: c
+          information bus: pci@0000:7f:0c.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:13 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: c.1
+          information bus: pci@0000:7f:0c.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:14 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: c.2
+          information bus: pci@0000:7f:0c.2
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:15 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 0
+          fabriquant: Intel Corporation
+          identifiant matériel: c.6
+          information bus: pci@0000:7f:0c.6
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:16 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 System Address Decoder
+          fabriquant: Intel Corporation
+          identifiant matériel: c.7
+          information bus: pci@0000:7f:0c.7
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:17 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: d
+          information bus: pci@0000:7f:0d.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:18 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: d.1
+          information bus: pci@0000:7f:0d.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:19 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Unicast Register 0
+          fabriquant: Intel Corporation
+          identifiant matériel: d.2
+          information bus: pci@0000:7f:0d.2
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:20 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller System Address Decoder 1
+          fabriquant: Intel Corporation
+          identifiant matériel: d.6
+          information bus: pci@0000:7f:0d.6
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:21
+          description: System peripheral
+          produit: Xeon E5/Core i7 Processor Home Agent
+          fabriquant: Intel Corporation
+          identifiant matériel: e
+          information bus: pci@0000:7f:0e.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: driver=sbridge_edac latency=0
+          ressources: irq:0
+     *-generic:22
+          description: Performance counters
+          produit: Xeon E5/Core i7 Processor Home Agent Performance Monitoring
+          fabriquant: Intel Corporation
+          identifiant matériel: e.1
+          information bus: pci@0000:7f:0e.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:23 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Registers
+          fabriquant: Intel Corporation
+          identifiant matériel: f
+          information bus: pci@0000:7f:0f.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:24 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller RAS Registers
+          fabriquant: Intel Corporation
+          identifiant matériel: f.1
+          information bus: pci@0000:7f:0f.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:25 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 0
+          fabriquant: Intel Corporation
+          identifiant matériel: f.2
+          information bus: pci@0000:7f:0f.2
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:26 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 1
+          fabriquant: Intel Corporation
+          identifiant matériel: f.3
+          information bus: pci@0000:7f:0f.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:27 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 2
+          fabriquant: Intel Corporation
+          identifiant matériel: f.4
+          information bus: pci@0000:7f:0f.4
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:28 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 3
+          fabriquant: Intel Corporation
+          identifiant matériel: f.5
+          information bus: pci@0000:7f:0f.5
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:29 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Target Address Decoder 4
+          fabriquant: Intel Corporation
+          identifiant matériel: f.6
+          information bus: pci@0000:7f:0f.6
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:30
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 0
+          fabriquant: Intel Corporation
+          identifiant matériel: 10
+          information bus: pci@0000:7f:10.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:31
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 1
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.1
+          information bus: pci@0000:7f:10.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:32 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 0
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.2
+          information bus: pci@0000:7f:10.2
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:33 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 1
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.3
+          information bus: pci@0000:7f:10.3
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:34
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 2
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.4
+          information bus: pci@0000:7f:10.4
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:35
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller Channel 0-3 Thermal Control 3
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.5
+          information bus: pci@0000:7f:10.5
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:36 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 2
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.6
+          information bus: pci@0000:7f:10.6
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:37 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 Integrated Memory Controller ERROR Registers 3
+          fabriquant: Intel Corporation
+          identifiant matériel: 10.7
+          information bus: pci@0000:7f:10.7
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          fonctionnalités: cap_list
+          configuration: latency=0
+     *-generic:38 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 DDRIO
+          fabriquant: Intel Corporation
+          identifiant matériel: 11
+          information bus: pci@0000:7f:11.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:39 NON-RÉCLAMÉ
+          description: System peripheral
+          produit: Xeon E5/Core i7 R2PCIe
+          fabriquant: Intel Corporation
+          identifiant matériel: 13
+          information bus: pci@0000:7f:13.0
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:40
+          description: Performance counters
+          produit: Xeon E5/Core i7 Ring to PCI Express Performance Monitor
+          fabriquant: Intel Corporation
+          identifiant matériel: 13.1
+          information bus: pci@0000:7f:13.1
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:41 NON-RÉCLAMÉ
+          description: Performance counters
+          produit: Xeon E5/Core i7 QuickPath Interconnect Agent Ring Registers
+          fabriquant: Intel Corporation
+          identifiant matériel: 13.4
+          information bus: pci@0000:7f:13.4
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: latency=0
+     *-generic:42
+          description: Performance counters
+          produit: Xeon E5/Core i7 Ring to QuickPath Interconnect Link 0 Performance Monitor
+          fabriquant: Intel Corporation
+          identifiant matériel: 13.5
+          information bus: pci@0000:7f:13.5
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-generic:43
+          description: System peripheral
+          produit: Xeon E5/Core i7 Ring to QuickPath Interconnect Link 1 Performance Monitor
+          fabriquant: Intel Corporation
+          identifiant matériel: 13.6
+          information bus: pci@0000:7f:13.6
+          version: 07
+          bits: 32 bits
+          horloge: 33MHz
+          configuration: driver=snbep_uncore latency=0
+          ressources: irq:0
+     *-scsi
+          identifiant matériel: 2
+          nom logique: scsi5
+          fonctionnalités: emulated
+        *-cdrom
+             description: DVD-RAM writer
+             produit: DVD-RAM SW810
+             fabriquant: hp
+             identifiant matériel: 0.0.0
+             information bus: scsi@5:0.0.0
+             nom logique: /dev/cdrom
+             nom logique: /dev/cdrw
+             nom logique: /dev/dvd
+             nom logique: /dev/dvdrw
+             nom logique: /dev/sr0
+             version: HA05
+             fonctionnalités: removable audio cd-r cd-rw dvd dvd-r dvd-ram
+             configuration: ansiversion=5 status=nodisc

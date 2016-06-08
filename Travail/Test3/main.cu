@@ -24,8 +24,8 @@ int main(int argc, char* argv[]){
 	ask(M,N,Width,r,a);
 	
 	// Calcul de M*N -> P
-	multCPU1_Square(M,N,P1,Width);
-	multGPU2_Square(M,N,P2,Width);
+	multGPU2_Square(M,N,P1,Width);
+	multGPU3_Square(M,N,P2,Width);
 	if (a!=0){
 		printf("\nP1 : ");
 		afficheMatriceSquare(P1,Width);
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]){
 	}
 	else
 	{
-		printf("\nRevoyez l'algorithme, ou les calculs sont trop imprécis ,faites le test avec des entiers?\n");
+		printf("\nRevoyez l'algorithme.\n");
 	}
 	//Libérer les matrices
 	free(M);

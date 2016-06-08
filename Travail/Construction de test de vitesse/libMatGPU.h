@@ -10,4 +10,7 @@ void multGPU2_Square(const float *M,const float *N,float *P,const int Width);
 __global__ void multGPU2_Square_aux(float *Mg,float *Ng,float *Pg,int Width,int nbThreadPerBlock);
 int divMaxDim(const int dim);
 
+void multGPU3_Square(const float *M,const float *N,float *P,const int Width);
+__global__ void multGPU3_Square_aux(float *Mg,float *Ng,float *Pg,int Width,int nbThreadPerBlock);
+
 #endif //LIBMATGPU_H_INCLUDED

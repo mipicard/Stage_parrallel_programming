@@ -6,3 +6,11 @@ Suite de l'exercice sur les matrices :
 			+ Bug (?) : si la taille est supérieur stricte à 32, le matrice résultat est fausse
 				| dû à un mauvais paramétrage : il faut un maximum de 512 thread, et pas un maximum de 512 * 512
 			+ Limitation des valeurs entre 0 et 99 (par cases de matrices) pour éviter des overflows de valeurs et obtenir des résultats faux
+	-> création d'un 2nd algorithme, extension du premier
+	-> Création d'un main pour mesurer le temps d'exécution d'un algorithme (de la lecture de la ligne de commande jusqu'à la destruction des matrices)
+	-> Création d'un 3ème algorithme, avec des temps d'accès mémoire optimisé
+		* Erreur de compil : comment bien allouer des tableau en shader sans connaitre la valeur de base?
+			+ Initialisation en mettant la plus grande valeur possible
+			+ L'algorithme est moins effectif que le second (pas autant de valeur possible)
+		* ALGORITHME A VOIR ET REVOIR POUR CORRECTION -> Corrigé, une inversion de variable.
+	-> Début de réflexion sur les mesures moyennes de temps d'exécution. (sur papier)
