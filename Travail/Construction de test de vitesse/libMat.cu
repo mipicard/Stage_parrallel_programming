@@ -95,11 +95,10 @@ void usage(){
 	printf(" -c : permet à l'utilisateur de remplir de lui même les matrices\n	* 0 pour l'entrée par clavier\n	* 1 pour l'entrée automatisé via un drand48\n");
 	printf(" -a : permet à l'utilisateur d'afficher ou non les matrices M et N\n");
 	printf(" -g : permet à l'utilisateur de choisir l'algorithme GPU :\n	* default : methode CPU\n	* 1,2,3 : une des 3 méthodes disponibles\n");
-	printf(" -n : permet à l'utilisateur de choisir le nombre mesure attendu\n");
 	exit(0);
 }
 
-void defArg(const int argc,char* argv[], int *w, int *r,int *a,int *g,int *rotate){
+void defArg(const int argc,char* argv[], int *w, int *r,int *a,int *g,int* rotate){
 	int c;
 	while((c = getopt (argc, argv, "?t:c:aG:n:"))!=-1){
 		switch(c){

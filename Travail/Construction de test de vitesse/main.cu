@@ -27,7 +27,7 @@ int main(int argc, char* argv[]){
 	float *M=NULL,*N=NULL,*P=NULL;
 	
 	FILE *sortie = NULL;
-	sortie = fopen("Resultat.txt","w+");
+	sortie = fopen("Resultat.txt","a");
 	if(sortie==NULL){exit(EXIT_FAILURE);}
 	
 	for(i=0;i<rotate;i++){

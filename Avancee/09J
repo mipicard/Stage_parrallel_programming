@@ -2,4 +2,6 @@ Suite de l'étude des matrices :
 	-> mise en place d'un programme permettant les tests de vitesses de calcul matriciel
 		* mise un place du programme C
 		* mise en place d'un script pour lancer les tests.
-	-> début de la refonte de la librairie des matrices pour en faire la rendre abstraite
+		* Suppression de l'effet de cache via les scripts
+	-> Explication de R et des rapports en général
+	-> Recherche d'un script pour transformer ses résultats en csv
