@@ -14,7 +14,7 @@ struct Matrice{
 	int dimension;
 };
 
-Matrice* initialiserMatrice(const int taille,const int type);
+Matrice* initialiserMatrice(const int taille,const typeMat type);
 Matrice* initialiserMatrice_INT(const int taille);
 Matrice* initialiserMatrice_FLOAT(const int taille);
 
@@ -37,5 +37,9 @@ void afficherMatrice(const Matrice *m);
 Matrice *addMatrice(const Matrice *m1,const Matrice *m2,typeMat typeMatriceSortie);
 Matrice *addMatrice_INT(const Matrice *m1,const Matrice *m2);
 Matrice *addMatrice_FLOAT(const Matrice *m1,const Matrice *m2);
+
+Matrice *multVarMatrice(const Matrice *m,const float k,typeMat typeDeRetour);
+Matrice *multVarMatrice_INT(const Matrice *m,const float k);
+Matrice *multVarMatrice_FLOAT(const Matrice *m,const float k);
 
 #endif // MATRICESQUARE_H_INCLUDED

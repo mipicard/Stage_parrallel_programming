@@ -120,7 +120,7 @@ void freeMatrice(Matrice *m){
 void swapTypeMatrice(Matrice *m,const typeMat type){
 	if(m==NULL || (m->matrice.matInt == NULL && m->matrice.matFloat == NULL)){exit(EXIT_FAILURE);}
 	if(type != m->type){
-		Matrice *m2 = initialiserMatrice(m->dimension,m->type);
+		Matrice *m2 = initialiserMatrice(m->dimension,type);
 		if(m2==NULL || (m2->matrice.matInt == NULL && m2->matrice.matFloat == NULL)){exit(EXIT_FAILURE);}
 		int i;
 		switch(type){
@@ -136,6 +136,8 @@ void swapTypeMatrice(Matrice *m,const typeMat type){
 				exit(EXIT_FAILURE);
 				break;
 		}
+		freeMatrice(m);
+		m=m2;
 	}
 }
 
@@ -147,6 +149,7 @@ void afficherMatrice(const Matrice *m){
 	switch(m->type){
 		case TYPE_INT:
 			for(i=0;i<m->dimension;i++){
+				printf("[");
 				for(j=0;j<m->dimension;j++){
 					printf("%d",m->matrice.matInt[i*m->dimension+j]);
 					if(j!=(m->dimension-1))
@@ -217,4 +220,61 @@ Matrice *addMatrice_FLOAT(const Matrice *m1,const Matrice *m2){
 }
 
 //MULTIPLICATION PAR UNE VARIABLE
-//Matrice *multVarMatrice_FLOAT
+Matrice *multVarMatrice(const Matrice *m,const float k,typeMat typeDeRetour){
+	if(m == NULL || (m->matrice.matFloat == NULL && m->matrice.matInt == NULL)){exit(EXIT_FAILURE);}
+	Matrice *answer = NULL;
+	switch(typeDeRetour){
+		case TYPE_INT:
+			answer=multVarMatrice_INT(m,k);
+			break;
+		case TYPE_FLOAT:
+			answer=multVarMatrice_FLOAT(m,k);
+			break;
+		default:
+			exit(EXIT_FAILURE);
+			break;
+	}
+	return answer;
+}
+
+Matrice *multVarMatrice_INT(const Matrice *m,const float k){
+	if(m == NULL || (m->matrice.matFloat == NULL && m->matrice.matInt == NULL)){exit(EXIT_FAILURE);}
+	Matrice *answer = initialiserMatrice(m->dimension,TYPE_INT);
+	if(answer==NULL || answer->matrice.matInt == NULL){exit(EXIT_FAILURE);}
+	int i;
+	for(i=0;i<(m->dimension*m->dimension);i++){
+		switch(m->type){
+			case TYPE_INT:
+				answer->matrice.matInt[i] = ((int)k) * m->matrice.matInt[i];
+				break;
+			case TYPE_FLOAT:
+				answer->matrice.matInt[i] = ((int)k) * ((int)m->matrice.matFloat[i]);
+				break;
+			default:
+				exit(EXIT_FAILURE);
+				break;
+		}
+	}
+	return answer;
+}
+
+Matrice *multVarMatrice_FLOAT(const Matrice *m,const float k){
+	if(m == NULL || (m->matrice.matFloat == NULL && m->matrice.matInt == NULL)){exit(EXIT_FAILURE);}
+	Matrice *answer = initialiserMatrice(m->dimension,TYPE_FLOAT);
+	if(answer==NULL || answer->matrice.matFloat == NULL){exit(EXIT_FAILURE);}
+	int i;
+	for(i=0;i<(m->dimension*m->dimension);i++){
+		switch(m->type){
+			case TYPE_INT:
+				answer->matrice.matFloat[i] = k * m->matrice.matInt[i];
+				break;
+			case TYPE_FLOAT:
+				answer->matrice.matFloat[i] = k * m->matrice.matFloat[i];
+				break;
+			default:
+				exit(EXIT_FAILURE);
+				break;
+		}
+	}
+	return answer;
+}
