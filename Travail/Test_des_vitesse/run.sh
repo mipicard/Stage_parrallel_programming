@@ -9,7 +9,7 @@ nbTourParTaille=$4
 rm -Rf "Resultat"
 mkdir "Resultat"
 
-echo "NumAlgo,TailleMat,RunId,Temps" > "Resultat/Resultat.csv"
+echo "NumAlgo,TailleMat,RunId,Temps" > "Resultat.csv"
 
 for algo in 0 2 3
 do
@@ -27,7 +27,7 @@ do
 				./Test -t $taille -G $algo -n 1 -c 1
 				res=`cat "Resultat.txt"`
 				rm "Resultat.txt"
-				echo "$algo,$taille,$tour,$res" >> "Resultat/Resultat.csv"
+				echo "$algo,$taille,$tour,$res" >> "Resultat.csv"
 				echo "$res" >> "Resultat/Resultat_$algo/taille_$taille" 
 				tour=$(($tour+1))
 			done
