@@ -14,8 +14,9 @@ void additionMatriceCPU(const MatriceCPU *m1,const MatriceCPU *m2, const Matrice
 void multiplicationMatriceCPU(const MatriceCPU *m1,const MatriceCPU *m2,MatriceCPU *resultat);//Multiplie m1 et m2, et stocke dans resultat
 
 int matriceEqualCPU(const MatriceCPU *m1,const MatriceCPU *m2);//Renvoie 1 si m1 et m2 sont de valeurs égales, sinon 0
-int noneMatriceEqualCPU(const MatriceCPU *m1,const MatriceCPU *m2);//Renvoie 1 si m1 et m2 sont de valeurs différentes, sinon 0
 
 void fillRandomMatriceCPU(MatriceCPU *m);//Remplie la matrice m d'Element aléatoire
+
+void matriceNonInitialiseCPU(const MatriceCPU *);//Test si la matrice est initialise et utilisable
 
 #endif //MATRICECPU_H_INCLUDED
