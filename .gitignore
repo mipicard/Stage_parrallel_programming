@@ -1,5 +1,6 @@
 Mes_Ressources
 .gitignore
-Travail/Test_des_vitesse/Resulta*
+Travail/Test_des_vitesse/Resultat
 expe_ref.tgz
 expe_ref
+*~
