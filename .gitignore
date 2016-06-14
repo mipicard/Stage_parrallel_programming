@@ -1,7 +1,9 @@
 Mes_Ressources
 .gitignore
 Travail/Test_des_vitesse/Resultat
+Travail/Abstraction/Resultat
 expe_ref.tgz
 expe_ref
 *~
 *.o
+*.so

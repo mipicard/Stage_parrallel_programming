@@ -1,0 +1,8 @@
+-1 : Erreur de paramètre d'exécution
+42 : pointeur CPU non alloue
+84 : pointeur GPU non alloue
+85 : échec d'attribution de mémoire GPU
+126 : pointeur Matrice non alloue
+505 : pointeur Fichier non alloue
+1337 : temps irrelevable
+9000 : pointeur temporel non alloue

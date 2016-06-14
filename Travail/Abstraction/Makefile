@@ -1,11 +1,24 @@
-Matrice.o : Matrice.cu Matrice.h MatriceCPU.o MatriceGPU.o Element.o DEBUG.h
-	nvcc -c Matrice.cu MatriceCPU.o MatriceGPU.o Element.o
+CC=nvcc
+CFLAGS=--compiler-options '-fPIC'
+TARGET=TestVitesse
 
-MatriceCPU.o : MatriceCPU.c MatriceCPU.h Element.o DEBUG.h
-	nvcc -c MatriceCPU.c Element.o
+all : $(TARGET)
 
-MatriceGPU.o : MatriceGPU.cu MatriceGPU.h Element.o DEBUG.h
-	nvcc -c MatriceGPU.cu Element.o
+$(TARGET) : main.cu Matrice.so
+	$(CC) $^ -o $@
 
-Element.o : Element.c Element.h
-	nvcc -c Element.c
+Matrice.so : Matrice.cu Matrice.h MatriceCPU.o MatriceGPU.o Element.o DEBUG.h
+	$(CC) -o $@ --shared $(CFLAGS) Matrice.cu MatriceCPU.o MatriceGPU.o Element.o
+
+%.o: %.cu
+	$(CC) -c $^ $(CFLAGS) -o $@
+
+%.o: %.c
+	$(CC) -c $^ $(CFLAGS) -o $@
+
+
+clean :
+	rm -f *.o
+
+mrproper : clean
+	rm -f $(TARGET) *.so

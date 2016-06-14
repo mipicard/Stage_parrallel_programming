@@ -1,6 +1,8 @@
 #ifndef MATRICECPU_H_INCLUDED
 #define MATRICECPU_H_INCLUDED
 
+#include "Element.h"
+
 typedef struct MatriceCPU MatriceCPU;
 struct MatriceCPU{
 	Element* matrice;//tableau linéaire représentant une matrice à 2 dimension
