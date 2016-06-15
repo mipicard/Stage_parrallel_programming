@@ -1,0 +1,24 @@
+CC=nvcc
+CFLAGS=--compiler-options '-fPIC'
+TARGET=TestVitesse
+SRC_C=$(wildcard *.c)
+SRC_CU=$(wildcard *.cu)
+OBJ=$(SRC_C:.c=.o) $(SRC_CU:.cu=.o)
+
+all : $(TARGET)
+
+$(TARGET) : $(OBJ)
+	$(CC) $^ -o $@
+
+%.o: %.cu
+	$(CC) -c $^ $(CFLAGS) -o $@
+
+%.o: %.c
+	$(CC) -c $^ $(CFLAGS) -o $@
+
+
+clean :
+	rm -f *.o
+
+mrproper : clean
+	rm -f $(TARGET) *.so
