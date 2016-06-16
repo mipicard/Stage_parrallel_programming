@@ -7,10 +7,6 @@ inline static void pointeurNonAlloue(const void *pointeur){if(pointeur == NULL){
 
 int dimEqual(const Matrice *m1,const Matrice *m2){return m1->dimension==m2->dimension;}
 
-inline static void cpMatriceSub(const Element *original,Element *copie,const unsigned long taille){
-	for(int i=0;i<taille*taille;i++)
-		copie[i]=original[i];
-}
 /*
 inline static int equalMatriceSub(const Element *matriceCPU,Element *matriceGPU,const unsigned long taille){
 	int answer = 1,i=0;
@@ -39,32 +35,42 @@ void freeMatrice(Matrice *m){
 	}
 }
 
-void remplirMatrice(Matrice *m,typeMemoire memory){
+void initialiserSubMatrice(Matrice *m,typeMemoire memory){
 	switch(memory){
 		case CPU:
 			m->matriceCPU=initialiserMatriceCPU(m->dimension);
-			fillRandomMatriceCPU(m->matriceCPU);
 			break;
 		case GPU:
 			m->matriceGPU=initialiserMatriceGPU(m->dimension);
-			fillRandomMatriceGPU(m->matriceGPU);
 			break;
 	}
 	m->memoryUsed=memory;
 }
 
+void remplirMatrice(Matrice *m){
+	switch(m->memoryUsed){
+		case CPU:
+			fillRandomMatriceCPU(m->matriceCPU);
+			break;
+		case GPU:
+			fillRandomMatriceGPU(m->matriceGPU);
+			break;
+	}
+}
+
 void swapMemoryUse(Matrice *m,typeMemoire mem){
 	if(mem!=m->memoryUsed){
+		unsigned long qtMemory = m->dimension * m->dimension * sizeof(MatriceGPU);
 		switch(m->memoryUsed){
 			case CPU:
 				if(m->matriceGPU==NULL)
 					m->matriceGPU = initialiserMatriceGPU(m->dimension);
-				cpMatriceSub((m->matriceCPU)->matrice,(m->matriceGPU)->matrice,m->dimension);
+				cudaMemcpy((m->matriceGPU)->matrice,(m->matriceCPU)->matrice,qtMemory,cudaMemcpyHostToDevice);
 				break;
 			case GPU:
 				if(m->matriceCPU==NULL)
 					m->matriceCPU = initialiserMatriceCPU(m->dimension);
-				cpMatriceSub((m->matriceGPU)->matrice,(m->matriceCPU)->matrice,m->dimension);
+				cudaMemcpy((m->matriceCPU)->matrice,(m->matriceGPU)->matrice,qtMemory,cudaMemcpyDeviceToHost);
 				break;
 		}
 		m->memoryUsed=mem;

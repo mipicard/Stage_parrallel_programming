@@ -1,6 +1,6 @@
 CC=nvcc
 CFLAGS= -g
-TARGET=TestVitesseCPU
+TARGET=TestVitesse
 
 all : $(TARGET)
 

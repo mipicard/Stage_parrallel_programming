@@ -43,9 +43,9 @@ int main(int argc, char** argv){
 	typeMemoire memoryUsed = CPU;
 	arguments(argc,argv,&tailleMatrice,&memoryUsed);
 	Matrice *m = initialiserMatrice(tailleMatrice),*n=initialiserMatrice(tailleMatrice),*resultat=initialiserMatrice(tailleMatrice);
-	remplirMatrice(m,memoryUsed);
-	remplirMatrice(n,memoryUsed);
-	remplirMatrice(resultat,memoryUsed);
+	initialiserSubMatrice(m,memoryUsed); remplirMatrice(m);
+	initialiserSubMatrice(n,memoryUsed); remplirMatrice(n);
+	initialiserSubMatrice(resultat,memoryUsed);
 	
 	if (gettimeofday(time1,NULL)){exit(1337);}
 	
