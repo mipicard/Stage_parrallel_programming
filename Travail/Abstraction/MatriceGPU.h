@@ -12,7 +12,7 @@ struct MatriceGPU{
 MatriceGPU *initialiserMatriceGPU(const unsigned long taille); //Initialise une matrice de dimension taille*taille dans la RAM
 void freeMatriceGPU(MatriceGPU *); //Mibere une matrice enregistre dans la RAM
 
-void additionMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2, const MatriceGPU *resultat); //Additionne m1 et m2, et stocke dans resultat
+void additionMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2, MatriceGPU *resultat); //Additionne m1 et m2, et stocke dans resultat
 void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat);//Multiplie m1 et m2, et stocke dans resultat
 
 int matriceEqualGPU(const MatriceGPU *m1,const MatriceGPU *m2);//Renvoie 1 si m1 et m2 sont de valeurs égales, sinon 0

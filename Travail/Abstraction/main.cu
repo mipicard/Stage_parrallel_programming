@@ -33,11 +33,10 @@ int main(int argc, char** argv){
 	int t=sizeof(struct timeval);
 	struct timeval *time1 = (struct timeval *) malloc(t), *time2 = (struct timeval *) malloc(t);
 	if(time1==NULL || time2 == NULL){exit(9000);}
-	
 	srand(time(NULL));
 	
 	FILE *sortie = NULL;
-	sortie = fopen("Resultat.txt","a");
+	sortie = fopen("Resultat.txt","w");
 	if(sortie==NULL){exit(505);}
 	
 	unsigned long tailleMatrice = 5;

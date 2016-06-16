@@ -1,0 +1,77 @@
+#Some experiment (change this title)
+#===================================
+
+#+ What is the goal of this experiments ?
+#+ Why ?
+#+ What are we looking at ?
+#+ What are we expecting ?
+
+```{r parsing}
+library(ggplot2)
+library(plyr)
+library(grid)
+library(methods)
+# csv file separated by ',' decimal signe is '.'
+data<-data.frame(read.csv2(file="Resultat.csv",sep=',',dec='.'))
+# How is organized data
+str(data)
+# Look at the beginning
+head(data)
+```
+
+#Results
+#-------
+
+###   Execution time
+
+```{r ExecTime, width=40}
+# ddply => summarize the results, compute mean, sd and se
+# mean is computed by grouping lines with same value for the columns given in
+# argument
+# see http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/
+stat<-ddply(data,c("Bench", "Class", "Monitor", "Log"),summarise,
+            N=length(Time),mean=mean(Time),sd=sd(Time),se=sd/sqrt(N))
+# Here we have two parameters monitor that appears on x
+# and Log that is used for color and groupping
+p  <- ggplot(stat,aes(x=Monitor,y=mean,fill=Log,group=Log))
+# Plot as bar (histograms
+p  <-  p + geom_bar(stat="identity", position="dodge")
+p  <-  p + geom_errorbar(aes(ymin=mean-se, ymax=mean+se),
+                  position="dodge")
+# Color gradiant:
+ p <- p + scale_fill_gradient2(low="#FFFFCC", high="#F03B20",mid="#FEB24C",
+                               midpoint=0.5,name="Logging\ninterval (s)")
+# Rename the axes
+p <- p + xlab("Monitoring interval (ms)")
+p <- p + ylab("Execution time (s)")
+# Force y to start at 0
+p <- p + expand_limits(y=0)
+# Theme customisation, commented out, play with it at your wish
+# p <- p + theme_bw()
+# p <-  p + theme(panel.grid.minor = element_line(colour = "black", linetype="dashed", size = 0.1),
+#         panel.grid.major = element_line(colour = "black", size = 0.1),
+#         legend.position="bottom", legend.key.size = unit(.5, "cm"))
+#p <- p+ theme(legend.position="none")
+show(p)
+# Save the plot as a pdf file
+#ggsave("moca_param.pdf",scale=.65,device=cairo_pdf)
+
+```
+
+#Is that what we expected ?
+#+ Yes: what can we conclude
+#+ No: Why, new hypothesis ?
+
+#Conclusions
+#-----------
+
+#What did we leaned from this experiment ?
+#Should we do something else ?
+#New experiments ?
+
+```{r free, echo=F}
+# Clean R environment
+remove(p)
+remove(stat)
+remove(data)
+```

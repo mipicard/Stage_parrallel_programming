@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "DEBUG.h"
 
 #include "Element.h"
@@ -7,7 +8,7 @@
 
 __host__ __device__ inline static unsigned int positionElement(const unsigned int i,const unsigned int j,const MatriceGPU *m){return i*m->dimension+j;}
 
-inline static void pointeurNonAlloue(const void *pointeur){if(!(pointeur == NULL)){exit(84);}}
+inline static void pointeurNonAlloue(const void *pointeur){if(pointeur == NULL){exit(84);}}
 
 inline static void cudaFail(cudaError_t e){if(e != cudaSuccess){exit(85);}}
 
@@ -22,10 +23,11 @@ static int divMaxDim(const int dim){
 MatriceGPU *initialiserMatriceGPU(const unsigned long taille){
 	const unsigned long qtMemory = taille*taille*sizeof(Element);
 	MatriceGPU *m = NULL;
+	MatriceGPU tmp;
 	cudaFail(cudaMalloc((void **)&m,sizeof(MatriceGPU)));
-	m->matrice = NULL;
-	cudaFail(cudaMalloc((void **)&(m->matrice),qtMemory));
-	cudaFail(cudaMemset(m->matrice,ZERO_ELEMENT,qtMemory));
+	cudaFail(cudaMalloc((void **)&(tmp.matrice),qtMemory));
+	//cudaFail(cudaMemset(m->matrice,tmp.matrice,sizeof(Element*)));
+	//cudaFail(cudaMemset(m->dimension,taille,sizeof(unsigned long)));
 	return m;
 }
 

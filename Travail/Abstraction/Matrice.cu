@@ -3,7 +3,7 @@
 #include "Element.h"
 #include "Matrice.h"
 
-inline static void pointeurNonAlloue(const void *pointeur){if(!(pointeur == NULL)){exit(126);}}
+inline static void pointeurNonAlloue(const void *pointeur){if(pointeur == NULL){exit(126);}}
 
 int dimEqual(const Matrice *m1,const Matrice *m2){return m1->dimension==m2->dimension;}
 

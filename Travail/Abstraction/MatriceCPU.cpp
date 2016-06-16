@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "DEBUG.h"
 
 #include "Element.h"
@@ -7,7 +8,7 @@
 
 inline static unsigned int positionElement(const unsigned int i,const unsigned int j,const MatriceCPU *m){return i*m->dimension+j;}
 
-inline static void pointeurNonAlloue(const void *pointeur){if(!(pointeur == NULL)){exit(42);}}
+inline static void pointeurNonAlloue(const void *pointeur){if(pointeur == NULL){exit(42);}}
 
 inline void matriceNonInitialiseCPU(const MatriceCPU *pointeur){pointeurNonAlloue(pointeur);pointeurNonAlloue(pointeur->matrice);}
 
@@ -28,13 +29,12 @@ inline static void calculPossible3mat(const MatriceCPU *m1,const MatriceCPU *m2,
 
 MatriceCPU *initialiserMatriceCPU(const unsigned long taille){
 	const unsigned long qtMemory=taille*taille*sizeof(Element);
-	MatriceCPU *m= malloc(sizeof(MatriceCPU));
+	MatriceCPU *m= (MatriceCPU *) malloc(sizeof(MatriceCPU));
 	pointeurNonAlloue(m);
-	m->matrice=malloc(qtMemory);
+	m->matrice=(Element *) malloc(qtMemory);
 	pointeurNonAlloue(m->matrice);
-	memset(m->matrice,ZERO_ELEMENT,qtMemory);
 	m->dimension = taille;
-	return NULL;
+	return m;
 }
 
 void freeMatriceCPU(MatriceCPU *m){
@@ -58,9 +58,9 @@ void multiplicationMatriceCPU(const MatriceCPU *m1,const MatriceCPU *m2,MatriceC
 	
 	Element tmp;
 	for(int i=0;i<m1->dimension;i++){
-		for(int j=0;i<m1->dimension;i++){
+		for(int j=0;j<m1->dimension;j++){
 			tmp=ZERO_ELEMENT;
-			for(int k=0;k<m1->dimension;i++)
+			for(int k=0;k<m1->dimension;k++)
 				tmp=additionElement(tmp,multiplicationElement(m1->matrice[i*m1->dimension+k],m2->matrice[k*m1->dimension +j]));
 			resultat->matrice[positionElement(i,j,resultat)]=tmp;
 		}
@@ -84,9 +84,8 @@ int matriceEqualCPU(const MatriceCPU *m1,const MatriceCPU *m2){
 
 void fillRandomMatriceCPU(MatriceCPU *m){
 	DEBUG(matriceNonInitialise(m);)
-	
 	for(int i=0;i<m->dimension;i++){
 		for(int j=0;j<m->dimension;j++)
-			m->matrice[positionElement(i,j,m)] = randomElement();		
+			m->matrice[positionElement(i,j,m)] = randomElement();	
 	}
 }

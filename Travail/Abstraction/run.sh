@@ -30,7 +30,7 @@ do
 	tour=1
 	while [ $tour -le $nbTourParTaille ]
 	do
-		#./TestVitesse -t $tour $arg
+		./TestVitesse -t $taille $arg
 		res=`cat "Resultat.txt"`
 		rm "Resultat.txt"
 		echo "$algo,$taille,$tour,$res" >> "Resultat.csv"
