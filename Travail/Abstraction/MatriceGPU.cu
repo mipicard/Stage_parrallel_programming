@@ -55,6 +55,30 @@ void additionMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *re
 	
 }
 
+#ifdef GPU_OPTI
+__global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
+	Element sum = ZERO_ELEMENT;
+	__shared__ Element Mgshader[32][32]; //On met le nbThreadPerBlock maximal possible, sinon il est impossible d'utiliser cette méthode...
+	__shared__ Element Ngshader[32][32];
+	
+	int bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y;
+	int ligne = by*nbThreadPerBlock+ty, colonne = bx*nbThreadPerBlock+tx;
+	unsigned long Width = resultat.dimension;
+	
+	for(int s=0;s<(Width/nbThreadPerBlock);s++)
+	{
+		Mgshader[ty][tx]=m1.matrice[ligne*Width+(s*nbThreadPerBlock + tx)];
+		Ngshader[ty][tx]=m1.matrice[colonne+Width*(s*nbThreadPerBlock + ty)];
+		__syncthreads();
+		
+		for(int k=0;k<nbThreadPerBlock;k++){
+			sum=additionElement(sum,multiplicationElement(Mgshader[ty][k],Ngshader[k][tx]));
+		}
+		__syncthreads();
+	}
+	resultat.matrice[ligne*Width+colonne] = sum;
+}
+#else
 __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
 	unsigned long ligne= blockIdx.y*nbThreadPerBlock + threadIdx.y, colonne= blockIdx.x*nbThreadPerBlock + threadIdx.x;
 	Element sum = ZERO_ELEMENT;
@@ -65,6 +89,7 @@ __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const
 	
 	resultat.matrice[positionElement(ligne,colonne,&resultat)] = sum;
 }
+#endif
 
 void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
 	const unsigned long dim=resultat->dimension;

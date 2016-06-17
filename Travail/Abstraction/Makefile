@@ -1,6 +1,8 @@
 CC=nvcc
-CFLAGS= -g
-TARGET=TestVitesse
+# Rajoutez -DGPU_OPTI pour TestVitesse2
+CFLAGS= -O
+#Renommez en TestVitesse2 si nécessaire, sinon laisser TestVitesse1
+TARGET=TestVitesse1
 
 all : $(TARGET)
 
