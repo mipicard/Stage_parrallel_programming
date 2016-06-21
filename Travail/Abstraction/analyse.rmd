@@ -29,11 +29,11 @@ Results
 # mean is computed by grouping lines with same value for the columns given in
 # argument
 # see http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/
-stat<-ddply(data,c("Algo", "TailleMat","RunId","TempsAlloc","TempsCalc"),summarise,N=length(TempsCalc),mean=mean(TempsCalc))
+stat<-ddply(data,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc))
 # Here we have two parameters monitor that appears on x
 # and Log that is used for color and groupping
 log50_trans = function() trans_new("log50",function(x) log(x,50), function(x) 50^x)
-p <- ggplot(stat,aes(x=TailleMat, y=TempsCalc, colour=Algo, shape=Algo))
+p <- ggplot(stat,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
 p <- p + scale_y_continuous(trans=log50_trans())
 #p <- p + coord_trans(y="log10")
 # Plot as bar (histograms
