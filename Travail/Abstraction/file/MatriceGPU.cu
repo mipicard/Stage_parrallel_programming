@@ -98,6 +98,7 @@ void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceG
 	dim3 dimBlock(div,div,1),dimGrid(divG,divG,1);
 	
 	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div);
+	cudaDeviceSynchronize();
 }
 /*
 __global__ static void matriceEqualGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,const int nbThreadPerBlock){

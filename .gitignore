@@ -8,3 +8,4 @@ expe_ref
 *.o
 *.so
 Travail/Abstraction/T*
+.R*

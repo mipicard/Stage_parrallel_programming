@@ -16,7 +16,7 @@ fi
 
 if [ ! -f "Resultat.csv" ]
 then
-	echo "Algo,TailleMat,RunId,Temps" > "Resultat.csv"
+	echo "Algo,TailleMat,RunId,TempsAlloc,TempsCalc" > "Resultat.csv"
 fi
 
 if [ ! -d "Resultat/Resultat_$algo" ]
@@ -30,7 +30,7 @@ do
 	tour=1
 	while [ $tour -le $nbTourParTaille ]
 	do
-		./TestVitesse$5 -t $taille $arg
+		./TestVitesse$5 -t $taille $arg 1>>Erreur.txt 2>>Erreur.txt
 		if [ -f "Resultat.txt" ]
 		then
 			res=`cat "Resultat.txt"`
