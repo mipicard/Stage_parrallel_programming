@@ -78,6 +78,7 @@ __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const
 	}
 	resultat.matrice[ligne*Width+colonne] = sum;
 }
+#elif GPU_OPTI_M
 #else
 __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
 	unsigned long ligne= blockIdx.y*nbThreadPerBlock + threadIdx.y, colonne= blockIdx.x*nbThreadPerBlock + threadIdx.x;
@@ -91,6 +92,23 @@ __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const
 }
 #endif
 
+#ifdef GPU_OPTI_M
+unsigned long dimSUP(const unsigned long dim){
+	unsigned long dimSup = 64;
+	while(dim>=dimSup)
+		dimSup=dimSup<<1;
+	return dimSup;
+}
+
+void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
+	const unsigned long dim=resultat->dimension;
+	unsigned long dimSup=dimSUP(dim);
+	unsigned long nbBlock=dimSup>>6;
+	dim3 dimBlock(64,16,1),dimGrid(nbBlock,nbBlock,1);
+	
+	cudaDeviceSynchronize();
+}
+#else
 void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
 	const unsigned long dim=resultat->dimension;
 	int div = divMaxDim(dim);
@@ -100,6 +118,7 @@ void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceG
 	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div);
 	cudaDeviceSynchronize();
 }
+#endif
 /*
 __global__ static void matriceEqualGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,const int nbThreadPerBlock){
 	__shared__ float answer;
