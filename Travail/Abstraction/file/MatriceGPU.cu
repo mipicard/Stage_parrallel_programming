@@ -111,11 +111,11 @@ inline static unsigned long dimSUP(const unsigned long dim){
 	unsigned long tmp = dim&((1<<6)-1);
 	return (tmp==0)?dim:(dim+(1<<6)-tmp);
 }
-static void cpMatriceDimDiff(MatriceGPU *origin,MatriceGPU *backend){
+static void cpMatriceDimDiff(const MatriceGPU *origin,MatriceGPU *backend){
 	unsigned long m=(origin->dimension > backend->dimension)?backend->dimension:origin->dimension;
 	for(int i=0;i<m;i++){
 		for(int j=0;j<m;j++)
-			cudaMemcpy(backend->matrice[i*backend->dimension+j],origin->matrice[i*origin->dimension+j],sizeof(Element),cudaMemcpyDeviceToDevice);
+			cudaMemcpy(&(backend->matrice[i*backend->dimension+j]),&(origin->matrice[i*origin->dimension+j]),sizeof(Element),cudaMemcpyDeviceToDevice);
 	}
 }
 /*
@@ -130,18 +130,14 @@ void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceG
 	const unsigned long dim=resultat->dimension;
 	unsigned long dimSup=dimSUP(dim);
 	unsigned long nbBlock=dimSup>>6;
+	printf("%lu : %lu \n",dim,dimSup);
 	dim3 dimBlock(64,16,1),dimGrid(nbBlock,nbBlock,1);
-	MatriceGPU *m1bis = m1,*m2bis = m2,*resultatbis = resultat;
-	if(dim!=dimSup){
 		MatriceGPU *m1bis=initialiserMatriceGPU(dimSup);MatriceGPU *m2bis=initialiserMatriceGPU(dimSup);
 		cpMatriceDimDiff(m1,m1bis);cpMatriceDimDiff(m2,m2bis);
 		MatriceGPU *resultatbis=initialiserMatriceGPU(dimSup);
-	}
 	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1bis,*m2bis,*resultatbis);
-	if(dim!=dimSup){
 		cpMatriceDimDiff(resultatbis,resultat);
-		freeMatriceGPU(*m1bis);freeMatriceGPU(*m2bis);freeMatriceGPU(*resultatbis);
-	}
+		freeMatriceGPU(m1bis);freeMatriceGPU(m2bis);freeMatriceGPU(resultatbis);
 	cudaDeviceSynchronize();
 }
 #else
