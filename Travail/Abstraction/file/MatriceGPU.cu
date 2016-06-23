@@ -80,18 +80,29 @@ __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const
 }
 #elif GPU_OPTI_M
 __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat){
+	Element sum[4];
+	for(int i=0;i<4;i++)
+		sum[i]=ZERO_ELEMENT;
+	
 	__shared__ Element Mgshader[64][64];
 	__shared__ Element Ngshader[64][64];
 	
 	int bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y;
 	for(int s=0;s<gridDim.x;s++){
-		/*
 		for(int i=0;i<4;i++){
-			Mgshader[ty+i*blockDim.y][tx]=m1.matrice[];
-			Mgshader[ty+i*blockDim.y][tx]=m2.matrice[];
+			Mgshader[ty+i*64][tx]=m1.matrice[];
+			Mgshader[ty+i*64][tx]=m2.matrice[];
 		}
-		*/
+		__syncthreads();
+		for(int i=0;i<4;i++){
+			for(int k=0;k<64;k++)
+				sum[i]=additionElement(sum[i],multiplicationElement(Mgshader[ty+i*64][k],Ngshader[k][tx+i*16]));
+		}
+		__syncthreads();
 	}
+	for(int i=0;i<4;i++)
+		
+	__syncthreads();
 }
 #else
 __global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
