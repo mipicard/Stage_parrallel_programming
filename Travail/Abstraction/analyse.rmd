@@ -1,3 +1,4 @@
+
 Comparaison de l'exécution des algorithmes naïfs de multiplication de matrice sur CPU et GPU
 ===================================
 
@@ -38,7 +39,7 @@ statGPU<-ddply(dataGPU,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc))
 #log50_trans = function() trans_new("log50",function(x) log(x,50), function(x) 50^x)
 p <- ggplot(statCPU,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
 q <- ggplot(statGPU,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
-p <- p + scale_x_continuous(trans=log2_trans())
+#p <- p + scale_x_continuous(trans=log2_trans())
 q <- q + scale_x_continuous(trans=log2_trans())
 #p <- p + coord_trans(y="log10")
 # Plot as bar (histograms
