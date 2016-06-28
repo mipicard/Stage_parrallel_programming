@@ -1,6 +1,7 @@
-
-Comparaison de l'exécution des algorithmes naïfs de multiplication de matrice sur CPU et GPU
-===================================
+```{r include=FALSE} 
+knitr::opts_chunk$set(echo = FALSE) 
+```
+# Comparaison de l'exécution des algorithmes naïfs de multiplication de matrice sur CPU et GPU
 
 Le but de cette expérience est de montrer les différences de performances entre la multiplication sur CPU et sur GPU de matrices, en utilisant les algorithmes naîfs de calculs. Ceci dans le but de débuter en programmation parrallèle et d'expérimenter techniques et utilisation du language CUDA.
 
@@ -19,86 +20,246 @@ dataCPU<-data.frame(read.csv2(file="Resultat_CPU.csv",sep=',',dec='.'))
 dataGPU12<-data.frame(read.csv2(file="Resultat_GPU12.csv",sep=',',dec='.'))
 dataGPU3<-data.frame(read.csv2(file="Resultat_GPU3.csv",sep=',',dec='.'))
 # How is organized data
-str(dataCPU)
-str(dataGPU12)
-str(dataGPU3)
+#str(dataCPU)
+#str(dataGPU12)
+#str(dataGPU3)
+```
+##I Algorithme
+
+CPU :
+```
+void multiplicationMatriceCPU(const MatriceCPU *m1,const MatriceCPU *m2,MatriceCPU *resultat){
+	DEBUG(calculPossible3mat(m1,m2,resultat);)
+	
+	Element tmp;
+	for(int i=0;i<m1->dimension;i++){
+		for(int j=0;j<m1->dimension;j++){
+			tmp=ZERO_ELEMENT;
+			for(int k=0;k<m1->dimension;k++)
+				tmp=additionElement(tmp,multiplicationElement(m1->matrice[i*m1->dimension+k],m2->matrice[k*m1->dimension +j]));s
+			resultat->matrice[positionElement(i,j,resultat)]=tmp;
+		}
+	}
+}
 ```
 
-Results
--------
+N.B (pour les algorithmes GPUx):
 
-###   Execution time
+* divMaxDim renvoie la plus grand diviseur (<=32) de la dimension envoyé
+* dimSup renvoie la dimension supérieur multiplie de 64
 
+GPU1 :
+```
+__global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
+	unsigned long ligne= blockIdx.y*nbThreadPerBlock + threadIdx.y, colonne= blockIdx.x*nbThreadPerBlock + threadIdx.x;
+	Element sum = ZERO_ELEMENT;
+	
+	for(int k=0;k<resultat.dimension;k++){
+		sum = additionElement(sum,multiplicationElement(m1.matrice[ligne*m1.dimension+k],m2.matrice[k*m2.dimension+colonne]));;
+	}
+	
+	resultat.matrice[positionElement(ligne,colonne,&resultat)] = sum;
+}
+
+void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
+	const unsigned long dim=resultat->dimension;
+	int div = divMaxDim(dim);
+	int divG = dim/div;
+	dim3 dimBlock(div,div,1),dimGrid(divG,divG,1);
+	
+	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div);
+	cudaDeviceSynchronize();
+```
+GPU2 :
+```
+__global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat,const int nbThreadPerBlock){
+	Element sum = ZERO_ELEMENT;
+	__shared__ Element Mgshader[32][32];
+	__shared__ Element Ngshader[32][32];
+	
+	int bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y;
+	int ligne = by*nbThreadPerBlock+ty, colonne = bx*nbThreadPerBlock+tx;
+	unsigned long Width = resultat.dimension;
+	
+	for(int s=0;s<(Width/nbThreadPerBlock);s++)
+	{
+		Mgshader[ty][tx]=m1.matrice[ligne*Width+(s*nbThreadPerBlock + tx)];
+		Ngshader[ty][tx]=m2.matrice[colonne+Width*(s*nbThreadPerBlock + ty)];
+		__syncthreads();
+		
+		for(int k=0;k<nbThreadPerBlock;k++){
+			sum=additionElement(sum,multiplicationElement(Mgshader[ty][k],Ngshader[k][tx]));
+		}
+		__syncthreads();
+	}
+	resultat.matrice[ligne*Width+colonne] = sum;
+}
+
+void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
+	const unsigned long dim=resultat->dimension;
+	int div = divMaxDim(dim);
+	int divG = dim/div;
+	dim3 dimBlock(div,div,1),dimGrid(divG,divG,1);
+	
+	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div);
+	cudaDeviceSynchronize();
+```
+GPU3 :
+```
+__global__ static void multiplicationMatriceGPU_Kernel(const MatriceGPU m1,const MatriceGPU m2,MatriceGPU resultat){
+	Element sum[4];
+	for(int i=0;i<4;i++)
+		sum[i]=ZERO_ELEMENT;
+	
+	__shared__ Element Mgshader[64][64];
+	__shared__ Element Ngshader[64][64];
+	
+	int bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y;
+	for(int s=0;s<gridDim.x;s++){
+		for(int i=0;i<4;i++){
+			Mgshader[ty+i*16][tx]=m1.matrice[resultat.dimension*(s*64+ty+i*16)+bx*64+tx];
+			Mgshader[ty+i*16][tx]=m2.matrice[resultat.dimension*(by*64+ty+i*16)+s*64+tx];
+		}
+		__syncthreads();
+		for(int i=0;i<4;i++){
+			for(int k=0;k<64;k++)
+				sum[i]=additionElement(sum[i],multiplicationElement(Mgshader[ty+i*16][k],Ngshader[k][tx+i*16]));
+		}
+		__syncthreads();
+	}
+	for(int i=0;i<4;i++)
+		resultat.matrice[resultat.dimension*(64*by+ty+i*16)+bx*64+tx]=sum[i];
+	__syncthreads();
+}
+
+void multiplicationMatriceGPU(const MatriceGPU *m1,const MatriceGPU *m2,MatriceGPU *resultat){
+	const unsigned long dim=resultat->dimension;
+	unsigned long dimSup=dimSUP(dim);
+	unsigned long nbBlock=dimSup>>6;
+	dim3 dimBlock(64,16,1),dimGrid(nbBlock,nbBlock,1);
+		MatriceGPU *m1bis=initialiserMatriceGPU(dimSup);MatriceGPU *m2bis=initialiserMatriceGPU(dimSup);
+		cpMatriceDimDiff(m1,m1bis);cpMatriceDimDiff(m2,m2bis);
+		MatriceGPU *resultatbis=initialiserMatriceGPU(dimSup);
+	multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1bis,*m2bis,*resultatbis);
+		cpMatriceDimDiff(resultatbis,resultat);
+		freeMatriceGPU(m1bis);freeMatriceGPU(m2bis);freeMatriceGPU(resultatbis);
+	cudaDeviceSynchronize();
+}
+```
+
+## II Resultats d'expériences
 ```{r ExecTime, width=40}
-# ddply => summarize the results, compute mean, sd and se
-# mean is computed by grouping lines with same value for the columns given in
-# argument
-# see http://www.cookbook-r.com/Graphs/Plotting_means_and_error_bars_(ggplot2)/
-statCPU<-ddply(dataCPU,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc))
-statGPU12<-ddply(dataGPU12,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc))
-statGPU3<-ddply(dataGPU3,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc))
-# Here we have two parameters monitor that appears on x
-# and Log that is used for color and groupping
-#log50_trans = function() trans_new("log50",function(x) log(x,50), function(x) 50^x)
+#Summarize
+statCPU<-ddply(dataCPU,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc),meanTA=mean(TempsAlloc),TT=meanTC+meanTA,N=length(TempsCalc),
+               sdTC=sd(TempsCalc),seTC=sdTC/sqrt(N))
+statGPU12<-ddply(dataGPU12,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc),meanTA=mean(TempsAlloc),TT=meanTC+meanTA)
+statGPU3<-ddply(dataGPU3,c("Algo", "TailleMat"),summarise,meanTC=mean(TempsCalc),meanTA=mean(TempsAlloc),TT=meanTC+meanTA)
+
+#Alloc
 p <- ggplot(statCPU,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
+p2 <- ggplot(statCPU,aes(x=TailleMat, y=meanTA, colour=Algo, shape=Algo))
+p3 <- ggplot(statCPU,aes(x=TailleMat, y=TT, colour=Algo, shape=Algo))
+
 q <- ggplot(statGPU12,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
+q2 <- ggplot(statGPU12,aes(x=TailleMat, y=meanTA, colour=Algo, shape=Algo))
+q3 <- ggplot(statGPU12,aes(x=TailleMat, y=TT, colour=Algo, shape=Algo))
+
 r <- ggplot(statGPU3,aes(x=TailleMat, y=meanTC, colour=Algo, shape=Algo))
-p <- p + scale_x_continuous(trans=log2_trans())
+r2 <- ggplot(statGPU3,aes(x=TailleMat, y=meanTA, colour=Algo, shape=Algo))
+r3 <- ggplot(statGPU3,aes(x=TailleMat, y=TT, colour=Algo, shape=Algo))
+
+#Scale
+#p <- p + scale_x_continuous(trans=log2_trans())
+p2 <- p2 + scale_x_continuous(trans=log2_trans())
+p3 <- p3 + scale_x_continuous(trans=log2_trans())
+
 q <- q + scale_x_continuous(trans=log2_trans())
+q2 <- q2 + scale_x_continuous(trans=log2_trans())
+q3 <- q3 + scale_x_continuous(trans=log2_trans())
+
 r <- r + scale_x_continuous(trans=log2_trans())
-#p <- p + coord_trans(y="log10")
-# Plot as bar (histograms
-#p <- p + geom_point(size=0.25)
-p <- p + geom_line(size=0.5)
+r2 <- r2 + scale_x_continuous(trans=log2_trans())
+r3 <- r3 + scale_x_continuous(trans=log2_trans())
+
+#Graph
+p <- p + geom_line(size=0.5) + geom_point(shape='+') + geom_errorbar(aes(ymin=meanTC-seTC, ymax=meanTC+seTC))
+p2 <- p2 + geom_line(size=0.5)
+p3 <- p3 + geom_line(size=0.5)
 q <- q + geom_line(size=0.5)
+q2 <- q2 + geom_line(size=0.5)
+q3 <- q3 + geom_line(size=0.5)
 r <- r + geom_line(size=0.5)
-#p <- p + geom_smooth(size=0.25)
-#q <- q + geom_smooth(size=0.25)
-#p  <-  p + geom_bar(stat="identity", position="dodge")
-#p <- p + facet_grid(. ~ Algo)
-#p  <-  p + geom_errorbar(aes(ymin=mean-se, ymax=mean+se),position="dodge")
-# Color gradiant:
-#p <- p + scale_fill_gradient2(low="#FFFFCC", high="#F03B20",mid="#FEB24C",midpoint=0.5,name="Logging\ninterval (s)")
-# Rename the axes
-p <- p + xlab("Matrice width*width(log2)")
-p <- p + ylab("Execution time (s)")
-q <- q + xlab("Matrice width*width")
-q <- q + ylab("Execution time (s)")
-# Force y to start at 0
+r2 <- r2 + geom_smooth(size=0.5)
+r3 <- r3 + geom_line(size=0.5)
+
+#Label
+p <- p + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps de calcul (s)")
+p2 <- p2 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps d'allocation (s)")
+p3 <- p3 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps total (s)")
+q <- q + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps de calcul (s)")
+q2 <- q2 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps d'allocation (s)")
+q3 <- q3 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps total (s)")
+r <- r + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps de calcul (s)")
+r2 <- r2 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps d'allocation (s)")
+r3 <- r3 + xlab("Matrice de dimension n*n (échelle log2)") + ylab("Temps total (s)")
+
+#Limit
 p <- p + expand_limits(x=10,y=0)
+p2 <- p2 + expand_limits(x=10,y=0)
+p3 <- p3 + expand_limits(x=10,y=0)
 q <- q + expand_limits(x=10,y=0)
+q2 <- q2 + expand_limits(x=10,y=0)
+q3 <- q3 + expand_limits(x=10,y=0)
 r <- r + expand_limits(x=10,y=0)
-# Theme customisation, commented out, play with it at your wish
-# p <- p + theme_bw()
-# p <-  p + theme(panel.grid.minor = element_line(colour = "black", linetype="dashed", size = 0.1),
-#         panel.grid.major = element_line(colour = "black", size = 0.1),
-#         legend.position="bottom", legend.key.size = unit(.5, "cm"))
-#p <- p+ theme(legend.position="none")
+r2 <- r2 + expand_limits(x=10,y=0)
+r3 <- r3 + expand_limits(x=10,y=0)
+```
+
+###&#160;&#160;&#160;&#160;1 Temps d'exécution
+```{r}
 show(p)
 show(q)
 show(r)
-# Save the plot as a pdf file
-#ggsave(plot = p,file = "MultMatrice_param.pdf")
-
 ```
 
-Is that what we expected ?
+###&#160;&#160;&#160;&#160;2 Temps d'allocation
+```{r}
+show(p2)
+show(q2)
+show(r2)
+```
 
-+ Yes: what can we conclude
-+ No: Why, new hypothesis ?
+###&#160;&#160;&#160;&#160;3 Temps total
+```{r}
+show(p3)
+show(q3)
+show(r3)
+```
 
-Conclusions
------------
+###&#160;&#160;&#160;&#160;4 Observation
+Globalement les résultats concordent avec nos attentes ; on peut dire qu'à partir du de la dimension 1000*1000, les algorithmes sont classé dans l'ordre attendu (CPU>GPU1>GPU2, en temps d'exécution) avec une vitesse d'allocation plus lente dans notre plage de test pour le GPU que pour le CPU.
+De plus, la différence de transfert de données pour les calculs entre les algorithmes GPU1 et GPU2 est bien visible est permet au GPU2 une meilleur efficacité temporelle.
 
-What did we leaned from this experiment ?
-Should we do something else ?
-New experiments ?
+Mais il y a quelques demi-surprises : le temps d'allocation, censé être identique pour chaque GPU est globalement le même, malgré une augmentation plus rapide de ce temps en fonction de la taille des matrices pour l'allocation nécessaire au GPU3. De plus, notre doute était fondé : les copies nécessaires dans des matrices plus grandes pour le GPU3 ajoutent des temps de calculs plus long même que la version CPU, que ce soit avec ou sans l'allocation de base, ce qui rend cet algorithme totalement incorrect et non valable. (face au algorithme GPU1 et GPU2). Enfin on remarque une lègere baisse de temps nécessaire pour l'allocation sur CPU entre les dimensions 32\*32 et 256\*256.
 
+## III Conclusion
+
+Grâce à cet expérience, nous avons pu saisir quelques prémices d'utilisation et de questionnement sur la programmation parrallèle sur GPU via le language CUDA, en nous basant sur la multiplication matricielle.
+Nous avons ainsi pu apréhender la méthode de pensées nécessaire à la parrallèlisation des calculs, ainsi que nous pencher sur les questions de transferts mémoires pouvant avoir un impact sur la vitesse de calculs.
+
+Pour pousser plus loin sur la multiplication matricielle, il serait utile de faire varier l'emplacement mémoire pré-calcul pour introduire la variable dû à la localité ou non des données (ici, toutes les matrices étaient stockées sur la mémoire correspondant à leur unités de calcul [CPU ou GPU] respectives).
+Il pourrait aussi être intéressant d'adapter ces algorithmes pour des matrices n'étant pas forcément carrées, et d'observer les différences de performances induites.
 ```{r free, echo=F}
 # Clean R environment
 remove(p)
+remove(p2)
+remove(p3)
 remove(q)
+remove(q2)
+remove(q3)
 remove(r)
+remove(r2)
+remove(r3)
 remove(statCPU)
 remove(statGPU12)
 remove(statGPU3)
