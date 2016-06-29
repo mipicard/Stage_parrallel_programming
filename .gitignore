@@ -9,3 +9,6 @@ expe_ref
 *.so
 Travail/Abstraction/T*
 .R*
+*.aux
+*.log
+*.synctex.gz
