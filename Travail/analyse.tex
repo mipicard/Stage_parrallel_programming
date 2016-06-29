@@ -1,0 +1,452 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\PassOptionsToPackage{usenames,dvipsnames}{color} % color is loaded by hyperref
+\hypersetup{unicode=true,
+            pdftitle={Comparaison de l'exécution des algorithmes naïfs de multiplication de matrice sur CPU et GPU},
+            pdfauthor={Picard Michaël},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\ImportTok}[1]{{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{{#1}}}}
+\newcommand{\BuiltInTok}[1]{{#1}}
+\newcommand{\ExtensionTok}[1]{{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{{#1}}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{{#1}}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Comparaison de l'exécution des algorithmes naïfs de multiplication de
+matrice sur CPU et GPU}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Picard Michaël}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \date{}
+  \predate{}\postdate{}
+
+
+
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\begin{document}
+\maketitle
+
+Le but de cette expérience est de montrer les différences de
+performances entre la multiplication sur CPU et sur GPU de matrices, en
+utilisant les algorithmes naîfs de calculs. Ceci dans le but de débuter
+en programmation parrallèle et d'expérimenter techniques et utilisation
+du language CUDA.
+
+Nous allons tester le temps d'exécution de 4 algorithmes :
+
+\begin{itemize}
+\tightlist
+\item
+  le 1er en CPU naïf
+\item
+  le 2eme en GPU naïf, avec division en blocks
+\item
+  le 3eme en GPU avec mémoire shader,i.e la mémoire locale à chaque
+  block du GPU, et avec division en blocks
+\item
+  le 4ème est une modification du 3eme pour augmenter le nombre de
+  calcul exécuté par thread à 4, en posant une taille de blocks et de
+  variable locales fixes
+\end{itemize}
+
+Tout ces tests seront effectué avec des matrices alloué localement au
+centre de calcul (CPU ou GPU).
+
+Nous nous attendons à des performances qui décroisse exponentiellement
+avec la taille de la matrice pour le 1er algorithme (CPU), et des
+performances à peu près stables pour les 2 algorithmes sur GPU, avec un
+léger gain de puissance pour le 3eme algorithme, ainsi qu'à une possible
+amélioration supplémentaire pour le dernier, avec un doute sur son
+efficacité dû aux transferts mémoires.
+
+\subsection{I Algorithme}\label{i-algorithme}
+
+CPU : Algorithme naïf exécuté sur le CPU, de la même manière qu'un
+humain le ferait.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\DataTypeTok{void} \NormalTok{multiplicationMatriceCPU(}\DataTypeTok{const} \NormalTok{MatriceCPU *m1,}\DataTypeTok{const} \NormalTok{MatriceCPU *m2,MatriceCPU *resultat)\{}
+    \NormalTok{Element tmp;}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<m1->dimension;i++)\{}
+        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{;j<m1->dimension;j++)\{}
+            \NormalTok{tmp=ZERO_ELEMENT;}
+            \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<m1->dimension;k++)}
+                \NormalTok{tmp=additionElement(tmp,multiplicationElement(m1->matrice[i*m1->dimension+k],m2->matrice[k*m1->dimension +j]));s}
+            \NormalTok{resultat->matrice[positionElement(i,j,resultat)]=tmp;}
+        \NormalTok{\}}
+    \NormalTok{\}}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+N.B (pour les algorithmes GPUx):
+
+\begin{itemize}
+\tightlist
+\item
+  divMaxDim renvoie la plus grand diviseur (\textless{}=32) de la
+  dimension envoyé
+\item
+  dimSup renvoie la dimension supérieur multiplie de 64
+\end{itemize}
+
+GPU1 : Algorithme naïf, qui divise la matrice en block carrés de même
+dimension et qui calcule de manière humaine chaque case de la matrice
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{__global__ }\DataTypeTok{static} \DataTypeTok{void} \NormalTok{multiplicationMatriceGPU_Kernel(}\DataTypeTok{const} \NormalTok{MatriceGPU m1,}\DataTypeTok{const} \NormalTok{MatriceGPU m2,MatriceGPU resultat,}\DataTypeTok{const} \DataTypeTok{int} \NormalTok{nbThreadPerBlock)\{}
+    \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{ligne= blockIdx.y*nbThreadPerBlock + threadIdx.y, colonne= blockIdx.x*nbThreadPerBlock + threadIdx.x; }\CommentTok{// On détermine les coordonnées de la case à calculer}
+    \NormalTok{Element sum = ZERO_ELEMENT;}
+    
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<resultat.dimension;k++)\{}
+        \NormalTok{sum = additionElement(sum,multiplicationElement(m1.matrice[ligne*m1.dimension+k],m2.matrice[k*m2.dimension+colonne]));;}
+    \NormalTok{\}}
+    
+    \NormalTok{resultat.matrice[positionElement(ligne,colonne,&resultat)] = sum;}\CommentTok{// On affecte le résultat à sa case (ordonné par ligne et colonne)}
+\NormalTok{\}}
+
+\DataTypeTok{void} \NormalTok{multiplicationMatriceGPU(}\DataTypeTok{const} \NormalTok{MatriceGPU *m1,}\DataTypeTok{const} \NormalTok{MatriceGPU *m2,MatriceGPU *resultat)\{}
+    \DataTypeTok{const} \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{dim=resultat->dimension; }\CommentTok{//Matrice de dimension dimension*dimension}
+    \DataTypeTok{int} \NormalTok{div = divMaxDim(dim); }\CommentTok{//dimension d'un block = div *div <= 32*32}
+    \DataTypeTok{int} \NormalTok{divG = dim/div; }\CommentTok{//On sépare notre matrice  divG*divG block}
+    \NormalTok{dim3 dimBlock(div,div,}\DecValTok{1}\NormalTok{),dimGrid(divG,divG,}\DecValTok{1}\NormalTok{);}
+    
+    \NormalTok{multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div); }\CommentTok{// Appel du Kernel}
+    \NormalTok{cudaDeviceSynchronize(); }\CommentTok{// On attend que tous les calculs soit terminés}
+\end{Highlighting}
+\end{Shaded}
+
+GPU2 : Amélioration de l'algorithme GPU1 en stockant temporairement des
+éléments de la matrice dans le but de réduire les appels à la mémoire
+globale GPU
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{__global__ }\DataTypeTok{static} \DataTypeTok{void} \NormalTok{multiplicationMatriceGPU_Kernel(}\DataTypeTok{const} \NormalTok{MatriceGPU m1,}\DataTypeTok{const} \NormalTok{MatriceGPU m2,MatriceGPU resultat,}\DataTypeTok{const} \DataTypeTok{int} \NormalTok{nbThreadPerBlock)\{}
+    \NormalTok{Element sum = ZERO_ELEMENT;}
+    \NormalTok{__shared__ Element Mgshader[}\DecValTok{32}\NormalTok{][}\DecValTok{32}\NormalTok{]; }\CommentTok{// On utilise la mémoire locale, en utilisant le fait que la matrice est}
+    \NormalTok{__shared__ Element Ngshader[}\DecValTok{32}\NormalTok{][}\DecValTok{32}\NormalTok{]; }\CommentTok{// découpé en block de dimension <= 32*32}
+    
+    \DataTypeTok{int} \NormalTok{bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y; }\CommentTok{// Index des block et thread}
+    \DataTypeTok{int} \NormalTok{ligne = by*nbThreadPerBlock+ty, colonne = bx*nbThreadPerBlock+tx; }\CommentTok{// On détermine les coordonnées de la case à calculer}
+    \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{Width = resultat.dimension;}
+    
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{s=}\DecValTok{0}\NormalTok{;s<(Width/nbThreadPerBlock);s++) }\CommentTok{// On remplit les tableaux temporaires locaux}
+    \NormalTok{\{}
+        \NormalTok{Mgshader[ty][tx]=m1.matrice[ligne*Width+(s*nbThreadPerBlock + tx)];}
+        \NormalTok{Ngshader[ty][tx]=m2.matrice[colonne+Width*(s*nbThreadPerBlock + ty)];}
+        \NormalTok{__syncthreads(); }\CommentTok{// On attend que les tableaux soient remplis}
+        
+        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<nbThreadPerBlock;k++)\{ }\CommentTok{// on calcule la valeur temporaire}
+            \NormalTok{sum=additionElement(sum,multiplicationElement(Mgshader[ty][k],Ngshader[k][tx]));}
+        \NormalTok{\}}
+        \NormalTok{__syncthreads(); }\CommentTok{// On attend la fin de tous les calculs}
+    \NormalTok{\}}
+    \NormalTok{resultat.matrice[ligne*Width+colonne] = sum; }\CommentTok{// On affecte le résultat à sa case (ordonné par ligne et colonne)}
+\NormalTok{\}}
+
+\DataTypeTok{void} \NormalTok{multiplicationMatriceGPU(}\DataTypeTok{const} \NormalTok{MatriceGPU *m1,}\DataTypeTok{const} \NormalTok{MatriceGPU *m2,MatriceGPU *resultat)\{}
+    \DataTypeTok{const} \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{dim=resultat->dimension; }\CommentTok{//Matrice de dimension dimension*dimension}
+    \DataTypeTok{int} \NormalTok{div = divMaxDim(dim); }\CommentTok{//dimension d'un block = div *div <= 32*32}
+    \DataTypeTok{int} \NormalTok{divG = dim/div; }\CommentTok{//On sépare notre matrice  divG*divG block}
+    \NormalTok{dim3 dimBlock(div,div,}\DecValTok{1}\NormalTok{),dimGrid(divG,divG,}\DecValTok{1}\NormalTok{);}
+    
+    \NormalTok{multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1,*m2,*resultat,div); }\CommentTok{// Appel du Kernel}
+    \NormalTok{cudaDeviceSynchronize(); }\CommentTok{// On attend que tous les calculs soit terminés}
+\end{Highlighting}
+\end{Shaded}
+
+GPU3 : Amélioration de l'algorithme GPU2 en fixant comme paramètre que
+chaque coté des matrices en entrées est multiple de 64, que les tableaux
+locaux sont de taille 64*64 toujours rempli et que les blocks sont tous
+de taille 64*16
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{__global__ }\DataTypeTok{static} \DataTypeTok{void} \NormalTok{multiplicationMatriceGPU_Kernel(}\DataTypeTok{const} \NormalTok{MatriceGPU m1,}\DataTypeTok{const} \NormalTok{MatriceGPU m2,MatriceGPU resultat)\{}
+    \NormalTok{Element sum[}\DecValTok{4}\NormalTok{];}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<}\DecValTok{4}\NormalTok{;i++)}
+        \NormalTok{sum[i]=ZERO_ELEMENT; }\CommentTok{// Tableau des 4 variables locales correspondant aux 4 cases de la matrices que l'on calcule par thread}
+    
+    \NormalTok{__shared__ Element Mgshader[}\DecValTok{64}\NormalTok{][}\DecValTok{64}\NormalTok{]; }\CommentTok{// On crée les tableaux temporaires locaux de dimension 4 fois (64*64)}
+    \NormalTok{__shared__ Element Ngshader[}\DecValTok{64}\NormalTok{][}\DecValTok{64}\NormalTok{]; }\CommentTok{// celle d'un block (64*16)}
+    
+    \DataTypeTok{int} \NormalTok{bx=blockIdx.x,by=blockIdx.x,tx=threadIdx.x,ty=threadIdx.y; }\CommentTok{// Index des blocks et threads}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{s=}\DecValTok{0}\NormalTok{;s<gridDim.x;s++)\{ }\CommentTok{//On remplit les tableaux temporaires locaux}
+        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<}\DecValTok{4}\NormalTok{;i++)\{}\CommentTok{//}
+            \NormalTok{Mgshader[ty+i*}\DecValTok{16}\NormalTok{][tx]=m1.matrice[resultat.dimension*(s*}\DecValTok{64}\NormalTok{+ty+i*}\DecValTok{16}\NormalTok{)+bx*}\DecValTok{64}\NormalTok{+tx];}
+            \NormalTok{Mgshader[ty+i*}\DecValTok{16}\NormalTok{][tx]=m2.matrice[resultat.dimension*(by*}\DecValTok{64}\NormalTok{+ty+i*}\DecValTok{16}\NormalTok{)+s*}\DecValTok{64}\NormalTok{+tx];}
+        \NormalTok{\}}
+        \NormalTok{__syncthreads(); }\CommentTok{// On attend que les tableaux soient remplis}
+        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<}\DecValTok{4}\NormalTok{;i++)\{ }\CommentTok{// Pour chaque case,}
+            \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<}\DecValTok{64}\NormalTok{;k++) }\CommentTok{// on calcule la valeur temporaire}
+                \NormalTok{sum[i]=additionElement(sum[i],multiplicationElement(Mgshader[ty+i*}\DecValTok{16}\NormalTok{][k],Ngshader[k][tx+i*}\DecValTok{16}\NormalTok{]));}
+        \NormalTok{\}}
+        \NormalTok{__syncthreads(); }\CommentTok{// On attend la fin de tous les calculs}
+    \NormalTok{\}}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<}\DecValTok{4}\NormalTok{;i++) }\CommentTok{// On affecte chaque résultat à sa case (ordonné par les blocks et les threads)}
+        \NormalTok{resultat.matrice[resultat.dimension*(}\DecValTok{64}\NormalTok{*by+ty+i*}\DecValTok{16}\NormalTok{)+bx*}\DecValTok{64}\NormalTok{+tx]=sum[i];}
+    \NormalTok{__syncthreads();}
+\NormalTok{\}}
+
+\DataTypeTok{void} \NormalTok{multiplicationMatriceGPU(}\DataTypeTok{const} \NormalTok{MatriceGPU *m1,}\DataTypeTok{const} \NormalTok{MatriceGPU *m2,MatriceGPU *resultat)\{}
+    \DataTypeTok{const} \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{dim=resultat->dimension; }\CommentTok{//Matrice de dimension dimension*dimension}
+    \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{dimSup=dimSUP(dim); }\CommentTok{//dimSup = X*64 >=dim}
+    \DataTypeTok{unsigned} \DataTypeTok{long} \NormalTok{nbBlock=dimSup>>}\DecValTok{6}\NormalTok{; }\CommentTok{// On divise la matrice de dimension dimSup en nbBlock*nbBlock block}
+    \NormalTok{dim3 dimBlock(}\DecValTok{64}\NormalTok{,}\DecValTok{16}\NormalTok{,}\DecValTok{1}\NormalTok{),dimGrid(nbBlock,nbBlock,}\DecValTok{1}\NormalTok{);}
+        \NormalTok{MatriceGPU *m1bis=initialiserMatriceGPU(dimSup);MatriceGPU *m2bis=initialiserMatriceGPU(dimSup);}
+        \NormalTok{cpMatriceDimDiff(m1,m1bis);cpMatriceDimDiff(m2,m2bis); }\CommentTok{// On copie les matrices entrées dans des matrices}
+        \NormalTok{MatriceGPU *resultatbis=initialiserMatriceGPU(dimSup); }\CommentTok{// de dimension supérieures ou égales}
+    \NormalTok{multiplicationMatriceGPU_Kernel<<<dimGrid,dimBlock>>>(*m1bis,*m2bis,*resultatbis); }\CommentTok{// Appel du Kernel}
+    \NormalTok{cudaDeviceSynchronize(); }\CommentTok{// On attend que tous les calculs soit terminés}
+        \NormalTok{cpMatriceDimDiff(resultatbis,resultat); }\CommentTok{// on récupére le bon résultat}
+        \NormalTok{freeMatriceGPU(m1bis);freeMatriceGPU(m2bis);freeMatriceGPU(resultatbis);}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{II Matériel}\label{ii-materiel}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{lstopo.png}
+\caption{\emph{description système obtenu via lstopo}}
+\end{figure}
+
+Description du GPU (via deviceQuery) :
+
+\begin{verbatim}
+  Quadro 600
+  CUDA Capability Major/Minor version number:    2.1
+  Total amount of global memory:                 1023 MBytes (1072889856 bytes)
+  ( 2) Multiprocessors, ( 48) CUDA Cores/MP:     96 CUDA Cores
+  GPU Max Clock rate:                            1280 MHz (1.28 GHz)
+  Memory Clock rate:                             800 Mhz
+  Memory Bus Width:                              128-bit
+  L2 Cache Size:                                 131072 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(65536), 2D=(65536, 65535), 3D=(2048, 2048, 2048)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(16384), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(16384, 16384), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total number of registers available per block: 32768
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  1536
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (65535, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 1 copy engine(s)
+  Run time limit on kernels:                     Yes
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Disabled
+  Device supports Unified Addressing (UVA):      Yes
+\end{verbatim}
+
+\subsection{III Resultats
+d'expériences}\label{iii-resultats-dexperiences}
+
+Nous avons choisi de séparer certain affichage :
+
+\begin{itemize}
+\tightlist
+\item
+  L'algorithme CPU est séparé des algorithmes GPU : il s'agit d'un choix
+  nécessaire, car il est à la fois logique de séparé les coeurs de
+  calculs et nécessaire de la faire pour une meilleur lisibilité des
+  résultats.
+\item
+  Les algorithmes GPU seront séparés entre eux s'il est nécessaire de le
+  faire par soucis de lisibilité
+\end{itemize}
+
+Sur chacun des graphiques présentés ci-dessous, un point correspond à
+une moyenne de 32 run et les barres d'erreurs sont affichées.
+
+\subsubsection{~~~~1 Temps d'exécution}\label{temps-dexecution}
+
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-6-2.pdf}
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+On remarque ici que, comme attendu, l'algorithme CPU en dimensions
+élevées de matrice (clairement lisible dès la dimension 500*500) est
+plus lent que les algorithmes GPU1 et GPU2, le GPU2 étant plus rapide
+que le GPU1. Fait surprenant, l'algorithme GPU3 que l'on espérait plus
+efficace que les autres est très rapidement le plus lent (très
+clairement visible dès la dimension 500*500).
+
+\subsubsection{~~~~2 Temps d'allocation}\label{temps-dallocation}
+
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-7-1.pdf}
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+Comme attendu sur la théorie de l'allocation mémoire du CPU et du GPU,
+le temps d'allocation des matrices sur le GPU est clairement supérieur à
+celui du CPU. Un autre fait surprenant est que le temps d'allocation des
+matrices pour l'algorithme GPU3 est supérieur au 2 autres algorithmes
+GPU, alors qu'il s'agit d'une allocation strictement identique.
+
+\subsubsection{~~~~3 Temps total}\label{temps-total}
+
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-8-1.pdf}
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-8-2.pdf}
+\includegraphics{analyse_files/figure-latex/unnamed-chunk-8-3.pdf}
+
+Ici, nous avons rassemblé les temps d'allocations et de calculs de
+chaque algorithme : nous avons donc les mêmes observation que pour les
+temps d'exécutions, car les temps d'allocations sont négligeables à
+partir d'un certain rang pour les algorithmes CPU et GPU3, et que les
+temps pour GPU1 et GPU2 n'ont pas d'incidence avec la comparaison entre
+eux et avec les autres algorithmes.
+
+\subsubsection{~~~~4 Observation}\label{observation}
+
+Globalement les résultats concordent avec nos attentes ; on peut dire
+qu'à partir du de la dimension 500*500, les algorithmes sont classé dans
+l'ordre attendu (CPU\textgreater{}GPU1\textgreater{}GPU2, en temps
+d'exécution) avec une vitesse d'allocation plus lente dans notre plage
+de test pour le GPU que pour le CPU. De plus, la différence de transfert
+de données pour les calculs entre les algorithmes GPU1 et GPU2 est bien
+visible est permet au GPU2 une meilleur efficacité temporelle.
+
+Mais il y a quelques demi-surprises : le temps d'allocation, censé être
+identique pour chaque GPU est globalement le même, malgré une
+augmentation plus rapide de ce temps en fonction de la taille des
+matrices pour l'allocation nécessaire au GPU3. De plus, notre doute
+était fondé : les copies nécessaires dans des matrices plus grandes pour
+le GPU3 ajoutent des temps de calculs plus long même que la version CPU,
+que ce soit avec ou sans l'allocation de base, ce qui rend cet
+algorithme totalement incorrect et non valable. (face au algorithme GPU1
+et GPU2). Enfin on remarque une lègere baisse de temps nécessaire pour
+l'allocation sur CPU entre les dimensions 32*32 et 256*256.
+
+\subsection{IV Conclusion}\label{iv-conclusion}
+
+Grâce à cet expérience, nous avons pu saisir quelques prémices
+d'utilisation et de questionnement sur la programmation parrallèle sur
+GPU via le language CUDA, en nous basant sur la multiplication
+matricielle. Nous avons ainsi pu apréhender la méthode de pensées
+nécessaire à la parrallèlisation des calculs, ainsi que nous pencher sur
+les questions de transferts mémoires pouvant avoir un impact sur la
+vitesse de calculs.
+
+Pour pousser plus loin sur la multiplication matricielle, il serait
+utile de faire varier l'emplacement mémoire pré-calcul pour introduire
+la variable dû à la localité ou non des données (ici, toutes les
+matrices étaient stockées sur la mémoire correspondant à leur unités de
+calcul {[}CPU ou GPU{]} respectives), ou de comparer en ne prenant que
+des tailles de matrice multiples de 2 (en améliorant peut être
+l'algorithme GPU3 qui dans le cas particulier où l'on a des matrices de
+dimension (X*64)*(X*64) ne ferait pas de copies ). Il pourrait aussi
+être intéressant d'adapter ces algorithmes pour des matrices n'étant pas
+forcément carrées, et d'observer les différences de performances
+induites.
+
+\end{document}
