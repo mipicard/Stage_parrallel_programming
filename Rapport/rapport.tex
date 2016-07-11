@@ -8,7 +8,7 @@
 \usepackage[final]{pdfpages}
 \usepackage{graphicx}
 \usepackage{pgfgantt}
-\usepackage[colorlinks=true,linkcolor=black]{hyperref}
+\usepackage[colorlinks=true,linkcolor=black,urlcolor=black]{hyperref}
 \usepackage{microtype}
 \usepackage{color}
 \usepackage{listings}
@@ -190,11 +190,40 @@ sont d'une excellente qualité typographique.} \\
 	    \includegraphics[scale=0.3]{Latex.eps}
 	\end{figure}
 	\subsection{Pourquoi ce stage?}
-	\indent J'ai choisi ce stage en regardant r\'e{}gulièrement sur le site du DLST, o\`u j'avais remarqu\'e ce stage propos\'e pour l'ann\'e{}e derni\`ere et qui m'avait tr\`es int\'e{}ress\'e : \'e{}tant un grand joueur sur PC, je poss\`ede et j'exploite ma carte graphique pour les jeux et je voulais savoir ce que je pouvais faire d'autre avec, ainsi que l'id\'e{}e de pouvoir r\'e{}ellement faire des ex\'e{}cutions parall\`eles au lieu de toujours le simul\'e en encha\^inant tr\`es rapidement des inse{}riencetructions senc\'e{}es \^etre parall\`eles.
+	\indent J'ai choisi ce stage en regardant r\'e{}gulièrement sur le site du DLST, o\`u j'avais remarqu\'e ce stage propos\'e pour l'ann\'e{}e derni\`ere et qui m'avait tr\`es int\'e{}ress\'e : \'e{}tant un grand joueur sur PC, je poss\`ede et j'exploite ma carte graphique pour les jeux et je voulais savoir ce que je pouvais faire d'autre avec, ainsi que l'id\'e{}e de pouvoir r\'e{}ellement faire des ex\'e{}cutions parall\`eles au lieu de toujours le simul\'e en encha\^inant tr\`es rapidement des instructions sens\'e{}es \^etre parall\`eles.
 	\newpage
 	\section{Mon parcours}
-	\indent Le but de ce stage \'e{}tait de d\'e{}couvrir la programmation parall\`eles sur GPU, en utilisant CUDA pour les cartes graphiques NVidia. Pour ce faire, nous avons utilis\'e l'exemple de la multiplication matricielle, qui permet de montrer efficacement les diff\'e{}rences de vitesse d'ex\'e{}cution entre des algos parall\`elis\'e{}s ou non.\\
-	\indent Au d\'e{}but du stage, nous avons d\^u
+	\indent Le but de ce stage \'e{}tait de d\'e{}couvrir la programmation parall\`eles sur GPU, en utilisant CUDA pour les cartes graphiques NVidia. Pour ce faire, nous avons utilis\'e l'exemple de la multiplication matricielle, qui permet de montrer efficacement les diff\'e{}rences de vitesse d'ex\'e{}cution entre des algos parall\`elis\'e{}s ou non.
+	\subsection{L'avancement chronologique}
+	\indent Durant la premi\`ere semaine de stage, nous avons d\^u suivre le programme de ce livre \href{http://www.hds.bme.hu/~fhegedus/C++/programming_massively_parallel_processors.pdf}{\textit{Programming massively parallel processors}} (disponible ici \textit{\url{http://www.hds.bme.hu/\~fhegedus/C++/programming_massively_parallel_processors.pdf}}) . Ainsi, nous avons suivi le tutoriel en apprenant le language et les exemples, qui seront aussi nos algorithmes de calcul durant tout notre stage, le tout \'e{}crit dans un seul et m\^eme fichier. Durant cette m\^eme semaine, nous avons aussi d\'e{}couvert et commenc\'e \`a utilis\'e GIT, ce qui nous a permis de garder des traces de notre \'evolution plus facilement (lien de notre GitHub : \textit{\url{https://github.com/mipicard/Stage_parrallel_programming}}).\\
+	Liste des algorithmes : voir en Annexe, les algorithmes CPU, GPU1 et GPU2.
+	
+	\vspace{10pt}
+	\indent Durant la deuxi\`eme semaine, suite au conseil de Mr HUARD, nous avons abstrait tout notre code, en s\'e{}parant notre code en petits fichiers :
+	\begin{itemize}
+	    \item un fichier Element.cpp, qui d\'e{}crit l'\'e{}l\'e{}ment constituant de nos matrices, ainsi que les foncions associ\'e{}es ;
+	    \item un fichier MatriceCPU.cpp et un fichier MatriceGPU.cu, qui d\'e{}crivent chacun un type de matrice en fonction du c\oe{}ur de calcul utilis\'e{}, dont chaque case de la matrice est d\'e{}fini par le type Element ;
+	    \item un fichier Matrice.cu, qui permet de faire la correspondance entre les deux type de matrice d\'e{}finit avant, permettant de ainsi de centraliser les appels au matrice ;
+	    \item un fichier Timer.cpp, qui fournit des m\'e{}thodes de mesures du temps, \`a la microseconde pr\`es ;
+	    \item un fichier main.cu, utilisant tout ce qui a \'e{}t\'e d\'e{}finit pr\'e{}cedemment, pour effectuer les calculs, pouvant changer les param\`etres d'ex\'e{}cution du programmes via la ligne de commande ;
+	    \item un makefile, qui d\'e{}finit les r\`egles de compilation du projet ;
+	    \item des fichiers bash, pour automatiser les tests de vitesses.
+	\end{itemize}
+	Le code complet est disponible ici :  \textit{\url{https://github.com/mipicard/Stage_parrallel_programming/blob/master/Travail/Matrices.tgz}}.\\
+	\indent De plus, nous avons commenc\'e \`a \'e{}tudier le language R et Rmarkdown pour nous donner une première id\'e{} du fonctionnement de cet outil.
+	
+	\vspace{10pt}
+	\indent Durant la troisi\`eme semaine, nous avons d\'e{}velopp\'e un dernier algorithme GPU qui aurait d\^u nous permettre d'obtenir de meilleur rapidit\'e{} d'ex\'e{}cution que ce produit pr\'e{}cedemment et continu\'e{} d'\'e{}tudi\'e{} le language R, pour utiliser les r\'e{}sultats d'exp\'e{}riences produit par les 3 algorithmes pr\'e{}c\'e{}dents.
+	
+	\vspace{10pt}
+	\indent Durant la quatri\`eme et derni\`ere semaine, nous avons fini d'\'e{}toffer notre rapport d'exp\'e{}rience, qui est disponible en annexe, et d\'e{}buter ce rapport de stage.
+	\subsection{L'apprentissage}
+	\indent Durant ce stage, nous avons \'e{}t\'e confront\'e \`a diff\'e{}rentes sous-probl\'e{}matiques et difficult\'e{}s :
+	\begin{itemize}
+	    \item \textbf{Les transferts m\'e{}moires} : lors d'opérations sur des c\oe{}urs de calculs diff\'e{}rents, la m\'e{}moire utilis\'e est diff\'e{}rente, ce qui implique un temps de copie entre les diff\'e{}rentes m\'e{}moires, et donc une l\'e{}g\`ere baisse de performance induite.
+	    \item \textbf{La mesure du temps} : il est n\'e{}cessaire de s\'e{}parer les temps d'allocations/transferts m\'e{}moires des temps de calculs, et donc de faire des mesures s\'e{}par\'e{}es des allocations/transferts et des opérations effectu\'e{}es.
+	    \item \textbf{Les donn\'e{}es (matrices)} : il est n\'e{}cessaire de prendre en compte la taille m\'e{}moire de la matrice, qui doit être multiple de la taille d'un bloc m\'e{}moire sur le c\oe{}ur de calcul utilis\'e. Par exemple, pour optimis\'e{} le calcul sur CPU, il faut que la matrice soit de taille multiple d'une ligne de cache et qu'elle soit toujours au d\'e{}but de cette ligne, tandis que sur le GPU \'e{}tudi\'e{} les memoires shaders de nos blocks permettaient d'utiliser 2 tableaux temporaires de taille 64*64 donc il est utiles d'utiliser des matrice de dimensions multiple de 64 (ou du moins des matrices utilisant un emplacement de cette taille m\^eme si elle est de taille inf\'e{}rieur). Il s'agit d'une notion qui donna lieu \`a un incompris jusqu'\`a l'\'e{}criture de ce rapport entre Mr HUARD et moi, car je n'avais pas saisi que je devais utilis\'e des matrices respectant ces crit\`eres pours les GPU, ce que je n'ai pas fait e qui a occasion\'e de cruelles pertes de performances pour le dernier algorithme d\'e{}velopp\'e{}, alors que des gains auraient d\^u \^etre observ\'e{}.
+	\end{itemize}
 	\newpage
 	\section{Conclusion}
 	\vspace{1.5mm}
@@ -219,10 +248,13 @@ sont d'une excellente qualité typographique.} \\
 		\ganttbar{R}{13}{18}\\
 		\ganttbar{\LaTeX}{18}{23}
 		\path[->,>=latex] (elem0.east) edge[out=0,in=180] (elem1.west);
-	\end{ganttchart}
-%ANNEXES
-
+	\end{ganttchart}\\
+	\textcolor{white}{}\\
+	\indent Pendant ce mois de stage \`a l'INRIA, j'ai pu avoir un aper\c{c}u de la vie en laboratoire de recherche et du m\'e{}tier de chercheur en d\'e{}couvrant par la m\^eme la programmation parall\`eles et tout les contraintes qui y sont li\'e{}es.\\
+	\indent J'ai aussi d\'e{}couvert moult nouvelles notions, languages et m\'e{}thodes de travail qui me seront utiles dans la suite de mes \'e{}tudes et surement dans mon futur m\'e{}tier.\\
+	\indent En conclusion, ce stage \`a \'e{}t\'e plus qu'une b\'e{}n\'e{}diction pour moi, dans un cadre de stage excellent.
 	\newpage
+%ANNEXES
 	\vspace*{\stretch{1}}
 	\begin{center}
 		\section*{Annexe : Rapport d'exp\'e{}rience}
