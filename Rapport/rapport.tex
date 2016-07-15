@@ -65,23 +65,23 @@
 	\section{Remerciement}
 		\indent Je tiens à remercier Mr HUARD Guillaume pour son accueil au sein de l'équipe Polaris, pour sa gentillesse et pour le temps qu'il m'a accord\'e{} pour m'expliquer de nouvelles notions, tant utilitaire, m\'e{}thodique qu'algorithmique, pour ses encouragements et son soutien durant ce stage, qui m'a permis de d\'e{}couvrir le m\'e{}tier d'enseignant-chercheur. \\
 		\indent Je remercie aussi Mr BENIAMINE David, actuellement en th\`ese à l'INRIA, pour le temps pass\'e{} à m’accueillir sur les locaux et ses conseils utiles pour me permettre d'avancer durant le stage.\\
-		\indent Je remercie Mme SIMON Annie, l'assistante de l'\'e{}quipe Polaris pour son temps sur mon dossier, et pour m'avoir aid\'e{} à r\'e{}gler les nombreux impr\'e{}vus à propos des conventions de stages et autres formalit\'e{}s.\\
-		\indent Je remercie aussi l'INRIA et le LIG ainsi que leur directeur, Mrs GAUSSIER Eric et GROS Patrick, pour m'avoir permis de participer à une pr\'e{}sentation d'algorithmie à des lycéens, dans leur locaux de Montbonnot, sous la tutelle de Mr HUARD.\\
+		\indent Je remercie Mme SIMON Annie, l'assistante de l'\'e{}quipe Polaris pour son temps sur mon dossier, et pour m'avoir aid\'e{} à r\'e{}gler les nombreux impr\'e{}vus à propos des conventions de stage et autres formalit\'e{}s.\\
+		\indent Je remercie aussi l'INRIA et le LIG ainsi que leurs directeurs respectifs, Mr GAUSSIER Eric et Mr GROS Patrick, pour m'avoir permis de participer \`a une pr\'e{}sentation d'algorithmie pour des lycéens, dans leurs locaux de Montbonnot, sous la tutelle de Mr HUARD.\\
 		\indent Je remercie enfin l'UGA, le DLST et Mmes MANDON Nina, COGNE Lydie, DARRACQ Marie-Cécile et CAJOT Patricia pour m'avoir donné l'opportunité de participé à ce stage.
 	\newpage
 	\section{Introduction}
-	\indent Mon stage à l'Inria portant sur le Calcul parrallèle sur GPU, j'ai été amené à utilisé de nombreux outils.\\
-	\noindent Je vais donc vous présenter en premier lieu la structure d'accueil du stage, puis je vous parlerai des différents outils utilisée durant ce stage, la raison pour laquelle j'ai choisi ce stage, avant de vous présenter mon évolution durant mes 4 semaines en tant que stagiaire.
+	\indent Mon stage à l'Inria portant sur le Calcul parall\`ele sur GPU, j'ai \'e{}t\'e{} amen\'e{} à utiliser de nombreux outils.\\
+	\noindent Je vais donc vous pr\'e{}senter en premier lieu la structure d'accueil du stage, puis je vous parlerai des différents outils utilisée durant ce stage, la raison pour laquelle j'ai choisi ce stage, avant de vous pr\'e{}senter mon \'e{}volution durant mes 4 semaines en tant que stagiaire.
 	\subsection{Environnement d'acceuil : INRIA \& LIG}
-	\indent L’INRIA est un centre de recherche cr\'e{}e \`a sous le r\'e{}gime du Général DeGaule et compte aujourd’hui presque une dizaine de centres en France. Le centre Rhône-Alpes a été crée en 1992.\\
-	\indent \`A Grenoble le directeur du centre est Mr GROS Patrick depuis le 1er Décembre 2014. La plupart des \'e{}quipes-projets Inria grenobloises sont des \'e{}quipes communes avec le CNRS, l’université Joseph Fourier, et Grenoble INP au sein des laboratoires :
+	\indent L’INRIA est un centre de recherche cr\'e{}\'e{} \`a sous le r\'e{}gime du G\'e{}n\'e{}ral De Gaule et compte aujourd’hui presque une dizaine de centres en France. Le centre Rh\^one-Alpes a \'e{}t\'e{} cr\'e{}\'e{} en 1992.\\
+	\indent \`A Grenoble le directeur du centre est Mr GROS Patrick depuis le 1er D\'e{}cembre 2014. La plupart des \'e{}quipes-projets INRIA grenobloises sont des \'e{}quipes communes avec le CNRS, l’Universit\'e{} Joseph Fourier (maintenant Universit\'e{} Grenoble Alpes), et Grenoble INP au sein des laboratoires :
     \begin{itemize}
-        \item Laboratoire d’informatique de Grenoble (LIG)
+        \item Laboratoire d’Informatique de Grenoble (LIG)
         \item Laboratoire Jean Kuntzmann (LJK)
         \item Laboratoire Grenoble Images Parole Signal Automatique (GIPSA)
-        \item Laboratoire Adaptation et Pathogénie des Microorganismes (LAPM)
+        \item Laboratoire Adaptation et Pathog\'e{}nie des Microorganismes (LAPM)
     \end{itemize}
-    Le LIG est quant \`a lui compos\'e d'une multitude d'équipe :
+    Le LIG est quant \`a lui compos\'e d'une multitude d'\'e{}quipe :
     \begin{itemize}
         \item POLARIS
         \item DATAMOVE
@@ -89,34 +89,34 @@
         \item ERODS
         \item ...
     \end{itemize}
-	\indent \indent L'\'e{}quipe qui m'a accueilli est l'\'e{}quipe POLARIS, nouvellement install\'e{}e au bat\^iment IMAG sur le campus universitaire de Grenoble. Le responsable du LIG est Mr GAUSSIER Eric, tandis que le responsable de l'\'e{}quipe POLARIS est Mr Legrand Arnaud. Le thème de recherche de cette \'e{}quipe est << Calcul distribu\'e et \`a haute performance~ >>, plus pr\'e{}cis\'e{}ment << Performance analysis and optimization of LARge Infrastructures and Systems >>.
-	\subsection{Outils et Méthodes utilis\'e{}s}
+	\indent \indent L'\'e{}quipe qui m'a accueilli est l'\'e{}quipe POLARIS, nouvellement install\'e{}e au b\^atiment IMAG sur le campus universitaire de Grenoble. Le responsable du LIG est Mr GAUSSIER Eric, tandis que le responsable de l'\'e{}quipe POLARIS est Mr Legrand Arnaud. Le thème de recherche de cette \'e{}quipe est << Calcul distribu\'e et \`a haute performance~ >>, plus pr\'e{}cis\'e{}ment << Performance analysis and optimization of LARge Infrastructures and Systems >>.
+	\subsection{Outils et M\'e{}thodes utilis\'e{}s}
 	\indent Dans cette partie, je vais vous pr\'e{}senter les diff\'e{}rentes m\'e{}thodes de travail et les languages (et logiciel) appris pour ce stage.
 	\subsubsection{CUDA et les cartes graphiques NVIDIA}
-	\indent Tout d'abord, il est n\'e{}cessaire de rappeler le sujet du stage : le calcul parall\`ele, plus pr\'e{}cis\'e{}ment sur GPU. Pour expliquer les diff\'e{}rents choix impl\'e{}s ici, il est n\'e{}cessaire de faire quelque petits rappels. \\
-	\indent Le CPU (Central Processing Unit ou processeur) est le c\oe{}ur de l'ordinateur, c'est lui qui ex\'e{}cute toutes les commandes et calculs requis par l'ordinateur. Avec l'\'e{}volution des programmes informatiques, la puissance de processeur c\oe{}ur a d\^u augmenter, jusqu'en atteindre une limite physique en 2003, qui induisit la cr\'e{}ation de processeur multic\oe{}ur pour augmenter les performances de notre mat\'e{}riel informatique. Mais le principal probl\`eme est qu'un programme s\'e{}quentiel ne va s'ex\'e{}cuter que sur un seul coeur du processeur, ce qui ne permettrai pas d'obtenir de gain efficace, d'o\`u les d\'e{}buts de la programmation parall\`ele. \\
-	\indent Dans le m\^eme temps, les cartes graphiques (qui sont accessible au grand public depuis 1981) ont \'e{}t\'e{} d\'e{}velop\'e{} : principalement utilis\'e{}es pour le rendu d'image en 2D/3D, il a \'e{}t\'e{} rapidement d\'e{}couvert que, gr\^ace \`a leur structure si particuli\`ere (elle poss\`ede un grand nombre de c\oe{}ur de calcul simple au d\'e{}triment de la complexit\'e{} des instructions et de la m\'e{}moire fourni), il est possible d'ex\'e{}cuter de multiples calculs simultan\'e{}ment, gagnant un temps de calculs d\'e{}pendant de la taille des donn\'e{}es (plus il y a de donn\'e{}es, plus le gain est important) si l'on compare à un c\oe{}ur de CPU. Donc les principales entreprises de production de cartes graphiques (NVidia et AMD) ont d\'e{}vellop\'e{} leur propre language de programmation parall\`ele, adapt\'e{} des languages de programmation existants, tel que le C et le C++ (il s'ag\^it d'extension des languages).
+	\indent Tout d'abord, il est n\'e{}cessaire de rappeler le sujet du stage : le calcul parall\`ele, plus pr\'e{}cis\'e{}ment sur GPU. Pour expliquer le choix de ce language, il est n\'e{}cessaire de faire quelque petits rappels. \\
+	\indent Le CPU (Central Processing Unit ou processeur) est le c\oe{}ur de l'ordinateur, c'est lui qui ex\'e{}cute toutes les commandes et calculs requis par l'ordinateur. Avec l'\'e{}volution des programmes informatiques, la puissance des c\oe{}urs des processeurs a d\^u augmenter, jusqu'en atteindre une limite physique en 2003, qui induisit la cr\'e{}ation de processeurs multic\oe{}urs pour augmenter les performances de notre mat\'e{}riel informatique. Mais le principal probl\`eme est qu'un programme s\'e{}quentiel ne va s'ex\'e{}cuter que sur un seul coeur d'un processeur multic\oe{}ur, ce qui ne permettait pas d'obtenir de gain de temps (d'ex\'e{}cution) efficace, d'o\`u les d\'e{}buts de la programmation parall\`ele. \\
+	\indent Dans le m\^eme temps, les cartes graphiques ou GPU (qui sont accessible au grand public depuis 1981) ont \'e{}t\'e{} d\'e{}velopp\'e{} : principalement utilis\'e{}es pour le rendu d'image en 2D/3D, il a \'e{}t\'e{} rapidement d\'e{}couvert que, gr\^ace \`a leur structure si particuli\`ere (elles poss\`edent un grand nombre de c\oe{}urs de calcul simple au d\'e{}triment de la complexit\'e{} des instructions et de la m\'e{}moire fourni), il est possible d'ex\'e{}cuter de multiples calculs simultan\'e{}ment, gagnant un temps de calculs d\'e{}pendant de la taille des donn\'e{}es (plus il y a de donn\'e{}es, plus le gain est important) si l'on compare à un c\oe{}ur de CPU. Donc, les principales entreprises de production de cartes graphiques (NVidia et AMD) ont d\'e{}vellop\'e{} leur propre language de programmation parall\`ele, adapt\'e{} des languages de programmation existants, tel que le C et le C++ (il s'ag\^it d'extension des languages).
 	\medbreak
-	\indent Pour en revenir avec le sujet du stage, nous allons donc faire du calcul parall\`ele et ce, sur le GPU. \'E{}tant donn\'e que les cartes graphiques du laboratoire sont des cartes graphiques NVidia, il a \'e{}t\'e choisi d'utiliser le language CUDA, d\'e{}vellop\'e par NVidia exclusivement pour leur produit. \`A noter qu'il aurait tout aussi bien pu \^etre possible d'utiliser un autre language.
-	\\ \indent Pour bien utiliser comprendre le CUDA (\`a partir de maintenant, le CUDA sera consid\'e{}r\'e{} comme une extension du C, car nous avons travaill\'e{} avec celle originaire du C, mais il existe des version C++,Python,...), il me parait n\'e{}cessaire de comprendre comment est form\'e{}e une carte graphique.
+	\indent Pour en revenir avec le sujet du stage, nous allons donc faire du calcul parall\`ele et ce, sur le GPU. \'E{}tant donn\'e que les cartes graphiques du laboratoire sont des cartes graphiques NVidia, il a \'e{}t\'e choisi d'utiliser le language CUDA, d\'e{}velopp\'e par NVidia exclusivement pour leur produit. \`A noter qu'il aurait tout aussi bien pu \^etre possible d'utiliser un autre language.
+	\\ \indent Pour bien utiliser et comprendre CUDA (\`a partir de maintenant, CUDA sera consid\'e{}r\'e{}e comme une extension du C, car nous avons travaill\'e{} avec celle originaire du C, mais il existe des versions C++,Python,...), il me parait n\'e{}cessaire de comprendre comment est form\'e{}e une carte graphique.
 	\begin{figure}
 	    \centering
 	    \caption{Structure d'un GPU}
 	    \label{fig:structGPU}
 	    \includegraphics[scale=0.65]{Shema_structure_GPU.eps}
 	\end{figure}
-    Dans la figure~\ref{fig:structGPU} est décrit la structure d'un GPU, la carte graphique \'e{}tant compos\'e{}e :
+    Dans la figure~\ref{fig:structGPU} est décrite la structure d'un GPU, la carte graphique \'e{}tant compos\'e{}e :
     \begin{itemize}
         \item d'une grille (Grid) qui comprend tout les \'e{}l\'e{}ments du GPU ;
-        \item de 2 DRAM (Dynamic Random Access Memory), qui stocke les donn\'e{}es modifiables pour l'une ou constantes pour l'autre, accessible par l'h\^ote (i.e. le CPU, et seulement par transfert) et par tout les autres composants du GPU ;
-        \item de multiples Blocks (en quantit\'e{}s d\'e{}pendant du GPU) qui rassemble :
+        \item de 2 DRAM (Dynamic Random Access Memory), qui stockent les donn\'e{}es modifiables pour l'une et les constantes pour l'autre, accessible par l'h\^ote (i.e. le CPU, et seulement par transfert) et par tous les autres composants du GPU ;
+        \item de multiples Blocks (en quantit\'e{} d\'e{}pendante du GPU) qui rassemble :
         \begin{itemize}[label=$+$]
-            \item d'une m\'e{}moire cache (Shared Memory) et d'une m\'e{}moire texture (non affich\'e{}e sur le sch\'e{}ma, de tr\`es faible capacit\`e et principalement pour les graphiques) accessible par tout les composants du Block ;
-            \item de multiples c\oe{}urs de calculs(Thread, en quantit\'e{}s d\'e{}pendant du GPU) de calculs ;
-            \item de 2 m\'e{}moires locales (Registered et Local) propres \`a chaque Thread qui permet le stockage de tableau de donn\'e{}es dans la m\`emoire Local et les autres donn\'e{}es dans la m\'e{}moire Registered.
+            \item une m\'e{}moire cache (Shared Memory) et une m\'e{}moire texture (non affich\'e{}e sur le sch\'e{}ma, de tr\`es faible capacit\`e{}e et principalement pour les graphiques) accessible par tous les composants du Block ;
+            \item de multiples c\oe{}urs de calculs (Thread, en quantit\'e{}s d\'e{}pendants du GPU) de calculs ;
+            \item de 2 m\'e{}moires locales (Registered et Local) propres \`a chaque Thread qui permet le stockage de tableaux de donn\'e{}es dans la m\`emoire Local et d'autres donn\'e{}es dans la m\'e{}moire Registered.
         \end{itemize}
     \end{itemize}
-    De plus, le GPU ne peux pas acceder \`a des donn\'e{}es stock\'e{}es sur les disque durs, la RAM et les m\'e{}moires internes du CPU, tandis que le CPU ne peux que faire des \'e{}changes de donn\'e{}es entre la RAM (de lui-m\^eme) et la DRAM (du GPU). \\
+    De plus, le GPU ne peut pas acc\'e{}der \`a des donn\'e{}es stock\'e{}es sur les disque durs, la RAM et les m\'e{}moires internes du CPU, tandis que le CPU ne peux que faire des \'e{}changes de donn\'e{}es entre la RAM (de lui-m\^eme) et la DRAM (du GPU). \\
     D'o\`u l'introduction de nouvelles fonctions, li\'e{}es au concept de la parall\`elisation des calculs :
     \begin{itemize}
         \item l'\'e{}quivalent du \textcolor{blue}{malloc()} et du \textcolor{blue}{free} sont \textcolor{green}{cudaMalloc} et \textcolor{green}{cudaFree}, pour allouer sur la Global Memory ;
@@ -195,7 +195,7 @@ sont d'une excellente qualité typographique.} \\
 	\section{Mon parcours}
 	\indent Le but de ce stage \'e{}tait de d\'e{}couvrir la programmation parall\`eles sur GPU, en utilisant CUDA pour les cartes graphiques NVidia. Pour ce faire, nous avons utilis\'e l'exemple de la multiplication matricielle, qui permet de montrer efficacement les diff\'e{}rences de vitesse d'ex\'e{}cution entre des algos parall\`elis\'e{}s ou non.
 	\subsection{L'avancement chronologique}
-	\indent Durant la premi\`ere semaine de stage, nous avons d\^u suivre le programme de ce livre \href{http://www.hds.bme.hu/~fhegedus/C++/programming_massively_parallel_processors.pdf}{\textit{Programming massively parallel processors}} (disponible ici \textit{\url{http://www.hds.bme.hu/\~fhegedus/C++/programming_massively_parallel_processors.pdf}}) . Ainsi, nous avons suivi le tutoriel en apprenant le language et les exemples, qui seront aussi nos algorithmes de calcul durant tout notre stage, le tout \'e{}crit dans un seul et m\^eme fichier. Durant cette m\^eme semaine, nous avons aussi d\'e{}couvert et commenc\'e \`a utilis\'e GIT, ce qui nous a permis de garder des traces de notre \'evolution plus facilement (lien de notre GitHub : \textit{\url{https://github.com/mipicard/Stage_parrallel_programming}}).\\
+	\indent Durant la premi\`ere semaine de stage, nous avons d\^u suivre le programme de ce livre \href{http://www.hds.bme.hu/~fhegedus/C++/programming_massively_parallel_processors.pdf}\textit{Programming massively parallel processors}} (disponible ici \url{http://www.hds.bme.hu/~fhegedus/C++/programming_massively_parallel_processors.pdf}) . Ainsi, nous avons suivi le tutoriel en apprenant le language et les exemples, qui seront aussi nos algorithmes de calcul durant tout notre stage, le tout \'e{}crit dans un seul et m\^eme fichier. Durant cette m\^eme semaine, nous avons aussi d\'e{}couvert et commenc\'e \`a utilis\'e GIT, ce qui nous a permis de garder des traces de notre \'evolution plus facilement (lien de notre GitHub : \url{https://github.com/mipicard/Stage_parrallel_programming}).\\
 	Liste des algorithmes : voir en Annexe, les algorithmes CPU, GPU1 et GPU2.
 	
 	\vspace{10pt}
@@ -209,14 +209,15 @@ sont d'une excellente qualité typographique.} \\
 	    \item un makefile, qui d\'e{}finit les r\`egles de compilation du projet ;
 	    \item des fichiers bash, pour automatiser les tests de vitesses.
 	\end{itemize}
-	Le code complet est disponible ici :  \textit{\url{https://github.com/mipicard/Stage_parrallel_programming/blob/master/Travail/Matrices.tgz}}.\\
+	Le code complet est disponible ici :  \url{https://github.com/mipicard/Stage_parrallel_programming/blob/master/Travail/Matrices.tgz}.\\
 	\indent De plus, nous avons commenc\'e \`a \'e{}tudier le language R et Rmarkdown pour nous donner une première id\'e{} du fonctionnement de cet outil.
 	
 	\vspace{10pt}
 	\indent Durant la troisi\`eme semaine, nous avons d\'e{}velopp\'e un dernier algorithme GPU qui aurait d\^u nous permettre d'obtenir de meilleur rapidit\'e{} d'ex\'e{}cution que ce produit pr\'e{}cedemment et continu\'e{} d'\'e{}tudi\'e{} le language R, pour utiliser les r\'e{}sultats d'exp\'e{}riences produit par les 3 algorithmes pr\'e{}c\'e{}dents.
 	
 	\vspace{10pt}
-	\indent Durant la quatri\`eme et derni\`ere semaine, nous avons fini d'\'e{}toffer notre rapport d'exp\'e{}rience, qui est disponible en annexe, et d\'e{}buter ce rapport de stage.
+	\indent Durant la quatri\`eme et derni\`ere semaine, nous avons fini d'\'e{}toffer notre rapport d'exp\'e{}rience, qui est disponible en annexe, et d\'e{}buter ce rapport de stage.\\
+	\indent Nous avons aussi particip\'e \`a une pr\'e{}sentation pour des secondes (lyc\'e{}e) sur le th\^eme des probl\`emes complexes en informatique, \`a l'aide d'exemple simple et ludique.
 	\subsection{L'apprentissage}
 	\indent Durant ce stage, nous avons \'e{}t\'e confront\'e \`a diff\'e{}rentes sous-probl\'e{}matiques et difficult\'e{}s :
 	\begin{itemize}
@@ -250,7 +251,7 @@ sont d'une excellente qualité typographique.} \\
 		\path[->,>=latex] (elem0.east) edge[out=0,in=180] (elem1.west);
 	\end{ganttchart}\\
 	\textcolor{white}{}\\
-	\indent Pendant ce mois de stage \`a l'INRIA, j'ai pu avoir un aper\c{c}u de la vie en laboratoire de recherche et du m\'e{}tier de chercheur en d\'e{}couvrant par la m\^eme la programmation parall\`eles et tout les contraintes qui y sont li\'e{}es.\\
+	\indent Pendant ce mois de stage avec l'\'e{}quipe POLARIS, j'ai pu avoir un aper\c{c}u de la vie en laboratoire de recherche et du m\'e{}tier d'enseignant-chercheur en d\'e{}couvrant par la m\^eme la programmation parall\`eles et tout les contraintes qui y sont li\'e{}es.\\
 	\indent J'ai aussi d\'e{}couvert moult nouvelles notions, languages et m\'e{}thodes de travail qui me seront utiles dans la suite de mes \'e{}tudes et surement dans mon futur m\'e{}tier.\\
 	\indent En conclusion, ce stage \`a \'e{}t\'e plus qu'une b\'e{}n\'e{}diction pour moi, dans un cadre de stage excellent.
 	\newpage
